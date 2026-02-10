@@ -2,9 +2,9 @@
   "name": "render-gateway-api",
   "version": "1.0.0",
   "description": "API Gateway centralizada para múltiplos projetos, hospedada no Render.",
-  "main": "run/render.js",
+  "main": "render.js",
   "scripts": {
-    "start": "node run/render.js",
+    "start": "node render.js",
     "build": "bash run/build.sh"
   },
   "author": "Seu Nome",
