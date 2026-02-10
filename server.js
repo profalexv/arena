@@ -15,6 +15,10 @@ const getOrigins = () => {
         "http://mindpool.alexandre.pro.br",
         "https://www.mindpool.alexandre.pro.br",
         "http://www.mindpool.alexandre.pro.br",
+        "https://eamos.alexandre.pro.br",
+        "http://eamos.alexandre.pro.br",
+        "https://www.eamos.alexandre.pro.br",
+        "http://www.eamos.alexandre.pro.br",
         "http://localhost:3000", // Local
         "http://localhost:*" // Qualquer porta local
     ];
