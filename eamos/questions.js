@@ -5,7 +5,7 @@
  * de Socket.IO relacionados a perguntas (criar, editar, deletar, etc.).
  */
 
-function registerQuestionHandlers(io, socket, sessions, logger) {
+function registerQuestionHandlers(nsp, socket, sessions, logger) {
 
     const logAction = (sessionCode, action, details = '') => {
         logger.info(`[SESSION: ${sessionCode}] ${action} ${details}`);
@@ -29,7 +29,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
 
         session.questions.push(newQuestion);
         logAction(sessionCode, `PERGUNTA #${newQuestionId} criada`);
-        io.to(sessionCode).emit('questionsUpdated', session.questions);
+        nsp.to(sessionCode).emit('questionsUpdated', session.questions);
         if (callback) callback({ success: true });
     });
 
@@ -48,7 +48,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
         Object.assign(questionToUpdate, updatedQuestion); // Atualiza a pergunta existente com os novos dados
 
         logAction(sessionCode, `PERGUNTA #${questionId} editada`);
-        io.to(sessionCode).emit('questionsUpdated', session.questions);
+        nsp.to(sessionCode).emit('questionsUpdated', session.questions);
         if (callback) callback({ success: true });
     });
 
@@ -65,7 +65,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
             logAction(sessionCode, `PERGUNTA #${questionId} deletada`);
             // A reordenação no cliente já lida com a atualização da UI.
             // Apenas emitimos a lista atualizada.
-            io.to(sessionCode).emit('questionsUpdated', session.questions);
+            nsp.to(sessionCode).emit('questionsUpdated', session.questions);
         }
     });
 

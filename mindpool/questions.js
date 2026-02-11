@@ -5,7 +5,7 @@
  * de Socket.IO relacionados a perguntas (criar, editar, deletar, etc.).
  */
 
-function registerQuestionHandlers(io, socket, sessions, logger) {
+function registerQuestionHandlers(nsp, socket, sessions, logger) {
 
     const logAction = (sessionCode, action, details = '') => {
         logger.info(`[SESSION: ${sessionCode}] ${action} ${details}`);
@@ -34,7 +34,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
         });
 
         logAction(sessionCode, `PERGUNTA #${newQuestionId} criada`);
-        io.to(sessionCode).emit('questionsUpdated', session.questions);
+        nsp.to(sessionCode).emit('questionsUpdated', session.questions);
         if (callback) callback({ success: true });
     });
 
@@ -65,7 +65,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
         question.timer = updatedQuestion.timer;
 
         logAction(sessionCode, `PERGUNTA #${questionId} editada`);
-        io.to(sessionCode).emit('questionsUpdated', session.questions);
+        nsp.to(sessionCode).emit('questionsUpdated', session.questions);
         if (callback) callback({ success: true });
     });
 
@@ -89,7 +89,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
         session.questions.push(newQuestion);
 
         logAction(sessionCode, `PERGUNTA #${questionId} duplicada para #${newQuestionId}`);
-        io.to(sessionCode).emit('questionsUpdated', session.questions);
+        nsp.to(sessionCode).emit('questionsUpdated', session.questions);
     });
 
     // DELETAR UMA PERGUNTA
@@ -110,7 +110,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
             logAction(sessionCode, `PERGUNTA #${questionId} deletada`);
             // A reordenação no cliente já lida com a atualização da UI.
             // Apenas emitimos a lista atualizada.
-            io.to(sessionCode).emit('questionsUpdated', session.questions);
+            nsp.to(sessionCode).emit('questionsUpdated', session.questions);
         }
     });
     // INICIAR UMA PERGUNTA
@@ -138,7 +138,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
             
             logAction(sessionCode, `PERGUNTA #${questionId} iniciada`);
             logger.info(`EMITTING 'newQuestion' to room ${sessionCode}`);
-            io.to(sessionCode).emit('newQuestion', { ...question });
+            nsp.to(sessionCode).emit('newQuestion', { ...question });
         }
     });
 
@@ -152,9 +152,9 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
             question.isConcluded = true; // Marca como encerrada
             
             logAction(sessionCode, `PERGUNTA #${questionId} parada`);
-            io.to(sessionCode).emit('votingEnded', { questionId });
+            nsp.to(sessionCode).emit('votingEnded', { questionId });
             // Envia a atualização para que a UI do controller mude os botões
-            io.to(sessionCode).emit('questionsUpdated', session.questions);
+            nsp.to(sessionCode).emit('questionsUpdated', session.questions);
         }
     });
 
@@ -168,8 +168,8 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
             question.acceptingAnswers = false; // Não aceita novas respostas
 
             logAction(sessionCode, `EXIBINDO RESULTADOS da pergunta #${questionId}`);
-            io.to(sessionCode).emit('newQuestion', { ...question }); // Envia a pergunta para a tela
-            io.to(sessionCode).emit('updateResults', { results: question.results, questionType: question.questionType }); // Envia os resultados
+            nsp.to(sessionCode).emit('newQuestion', { ...question }); // Envia a pergunta para a tela
+            nsp.to(sessionCode).emit('updateResults', { results: question.results, questionType: question.questionType }); // Envia os resultados
         }
     });
 }

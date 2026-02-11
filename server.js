@@ -62,8 +62,10 @@ fs.readdirSync(projectsDir).forEach(project => {
 
       // If module exports a socket initializer, use it
       if (projectModule.initializeSocket) {
-        projectModule.initializeSocket(io);
-        console.log(`Initialized Socket.IO handlers for ${project}`);
+        // Create a dedicated namespace for the project
+        const nsp = io.of(`/${project}`);
+        projectModule.initializeSocket(nsp); // Pass the namespace, not the global io
+        console.log(`Initialized Socket.IO namespace for /${project}`);
       }
     }
   }

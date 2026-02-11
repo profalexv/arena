@@ -120,13 +120,16 @@ function initializeSocket(io) {
     }, parseInt(process.env.SESSION_CLEANUP_INTERVAL || '300000'));
 
 
-    // ===== SOCKET.IO EVENTS =====
-    io.on('connection', (socket) => {
+    // ===== SOCKET.IO NAMESPACE LOGIC =====
+    // The 'nsp' parameter is the namespace object (e.g., io.of('/mindpool'))
+    // passed from the main server.js file.
+    nsp.on('connection', (socket) => {
         const clientIp = socket.handshake.address;
         logger.info(`Usuário conectado: ${socket.id}`);
 
         // Registra os handlers de eventos de perguntas
-        registerQuestionHandlers(io, socket, sessions, logger);
+        // Pass the namespace 'nsp' instead of the global 'io'
+        registerQuestionHandlers(nsp, socket, sessions, logger);
 
         // 1. CRIAR UMA NOVA SESSÃO
         socket.on('createSession', async ({ controllerPassword, presenterPassword, deadline, theme, questions: importedQuestions }, callback) => {
@@ -249,8 +252,8 @@ function initializeSocket(io) {
                 if (role === 'controller' && session.controllerSocketId && session.controllerSocketId !== socket.id) {
                     // Permitir múltiplos controllers (novo na v1.17)
                     logger.warn(`Múltiplos controllers tentando acessar ${sessionCode}`);
-                    // Desconectar o antigo e conectar o novo
-                    const oldSocket = io.sockets.sockets.get(session.controllerSocketId);
+                    // Desconectar o antigo e conectar o novo (use nsp.sockets)
+                    const oldSocket = nsp.sockets.get(session.controllerSocketId);
                     if (oldSocket) {
                         oldSocket.emit('controllerDisplaced', { message: 'Novo controller conectado à sessão' });
                         oldSocket.disconnect();
@@ -292,7 +295,7 @@ function initializeSocket(io) {
                 session.theme = theme;
                 logAction(sessionCode, `TEMA alterado para '${theme}'`);
                 // Notifica todos na sala (presenters, outros controllers) sobre a mudança
-                io.to(sessionCode).emit('themeChanged', { theme }); // This already notifies audience
+                nsp.to(sessionCode).emit('themeChanged', { theme }); // This already notifies audience
             }
         });
 
@@ -302,7 +305,7 @@ function initializeSocket(io) {
             if (session && socket.role === 'controller') {
                 session.isAudienceUrlVisible = visible;
                 logAction(sessionCode, `Visibilidade da URL da plateia alterada para: ${visible}`);
-                io.to(sessionCode).emit('audienceUrlVisibilityChanged', { visible });
+                nsp.to(sessionCode).emit('audienceUrlVisibilityChanged', { visible });
             }
         });
 
@@ -322,7 +325,7 @@ function initializeSocket(io) {
             logAction(sessionCode, `PLATEIA conectada (total: ${session.audienceCount})`);
 
             // Notifica o controller sobre a mudança na contagem da plateia
-            io.to(sessionCode).emit('audienceCountUpdated', { count: session.audienceCount, joined: true });
+            nsp.to(sessionCode).emit('audienceCountUpdated', { count: session.audienceCount, joined: true });
 
             // Envia o tema atual da sessão para o novo membro da plateia
             socket.emit('themeChanged', { theme: session.theme || 'light' });
@@ -347,7 +350,7 @@ function initializeSocket(io) {
                 Object.assign(questionToUpdate, updatedQuestion, { id: questionId, results: questionToUpdate.results });
                 
                 logAction(sessionCode, `PERGUNTA EDITADA (ID: ${questionId})`);
-                io.to(sessionCode).emit('questionsUpdated', session.questions);
+                nsp.to(sessionCode).emit('questionsUpdated', session.questions);
             }
         });
 
@@ -365,7 +368,7 @@ function initializeSocket(io) {
                 });
                 
                 logAction(sessionCode, `PERGUNTAS REORDENADAS`);
-                io.to(sessionCode).emit('questionsUpdated', session.questions);
+                nsp.to(sessionCode).emit('questionsUpdated', session.questions);
             }
         });
 
@@ -384,7 +387,7 @@ function initializeSocket(io) {
             if (question.endTime && Date.now() > question.endTime) {
                 if (question.acceptingAnswers) {
                     question.acceptingAnswers = false;
-                    io.to(sessionCode).emit('votingEnded', { questionId });
+                    nsp.to(sessionCode).emit('votingEnded', { questionId });
                 }
                 return;
             }
@@ -402,7 +405,7 @@ function initializeSocket(io) {
             }
 
             if (session.questions[questionId]) {
-                io.to(sessionCode).emit('updateResults', {
+                nsp.to(sessionCode).emit('updateResults', {
                     results: question.results, 
                     questionType: question.questionType,
                     questionId: questionId
@@ -431,7 +434,7 @@ function initializeSocket(io) {
         socket.on('endSession', ({ sessionCode }) => {
             if (sessions[sessionCode]) {
                 logAction(sessionCode, 'ENCERRADA pelo controller');
-                io.to(sessionCode).emit('sessionEnded', { message: 'Sessão encerrada pelo controller' });
+                nsp.to(sessionCode).emit('sessionEnded', { message: 'Sessão encerrada pelo controller' });
                 delete sessions[sessionCode];
             }
         });
@@ -448,7 +451,7 @@ function initializeSocket(io) {
                 } else if (socket.role === 'audience') {
                     session.audienceCount = Math.max(0, session.audienceCount - 1);
                     // Notifica o controller sobre a mudança na contagem da plateia
-                    io.to(sessionCode).emit('audienceCountUpdated', { count: session.audienceCount, joined: false });
+                    nsp.to(sessionCode).emit('audienceCountUpdated', { count: session.audienceCount, joined: false });
                 }
                 logAction(sessionCode, `${socket.role.toUpperCase()} desconectado`);
             }
