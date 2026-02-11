@@ -89,7 +89,7 @@ router.post('/api/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const [result] = await pool.query(
-            'INSERT INTO users (username, password, name, role) VALUES (?, ?, ?, ?)',
+            'INSERT INTO shared_users (username, password, name, role) VALUES (?, ?, ?, ?)',
             [username, hashedPassword, name, role || 'admin']
         );
 
