@@ -46,7 +46,7 @@ router.post('/api/login', async (req, res) => {
     }
 
     try {
-        const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
+        const [rows] = await pool.query('SELECT * FROM shared_users WHERE username = ?', [username]);
 
         if (rows.length === 0) {
             return res.status(401).json({ message: 'Credenciais inválidas.' });
