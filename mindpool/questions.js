@@ -16,8 +16,12 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
         const session = sessions[sessionCode];
         if (!session) return;
 
+        // Garante que cada pergunta tenha um ID único e estável, não baseado no índice.
+        const newQuestionId = (session.nextQuestionId || session.questions.length);
+        session.nextQuestionId = newQuestionId + 1;
+
         session.questions.push({
-            id: session.questions.length,
+            id: newQuestionId,
             text: question.text,
             imageUrl: question.imageUrl,
             questionType: question.questionType,
@@ -29,7 +33,7 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
             isConcluded: false // Flag para saber se a pergunta já foi encerrada
         });
 
-        logAction(sessionCode, `PERGUNTA #${session.questions.length - 1} criada`);
+        logAction(sessionCode, `PERGUNTA #${newQuestionId} criada`);
         io.to(sessionCode).emit('questionsUpdated', session.questions);
         if (callback) callback({ success: true });
     });
@@ -37,20 +41,28 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
     // EDITAR UMA PERGUNTA
     socket.on('editQuestion', ({ sessionCode, questionId, updatedQuestion }, callback) => {
         const session = sessions[sessionCode];
-        if (!session || !session.questions[questionId]) return;
+        if (!session) return;
 
-        const question = session.questions[questionId];
-        
-        if (session.activeQuestion === questionId || question.isConcluded) {
-            socket.emit('error', 'Não é possível editar uma pergunta ativa ou já encerrada.');
+        const questionIndex = session.questions.findIndex(q => q && q.id === questionId);
+        if (questionIndex === -1) {
+            if (callback) callback({ success: false, message: 'Pergunta não encontrada.' });
             return;
         }
 
-        question.text = updatedQuestion.text || question.text;
-        question.imageUrl = updatedQuestion.imageUrl || question.imageUrl;
-        question.options = updatedQuestion.options || question.options;
-        question.charLimit = updatedQuestion.charLimit || question.charLimit;
-        question.timer = updatedQuestion.timer || question.timer;
+        const question = session.questions[questionIndex];
+        
+        if (session.activeQuestion === questionId || question.isConcluded) {
+            socket.emit('error', 'Não é possível editar uma pergunta ativa ou já encerrada.');
+            if (callback) callback({ success: false, message: 'Não é possível editar uma pergunta ativa ou já encerrada.' });
+            return;
+        }
+
+        // Atribuição direta para permitir limpar campos (ex: remover uma imagem)
+        question.text = updatedQuestion.text;
+        question.imageUrl = updatedQuestion.imageUrl;
+        question.options = updatedQuestion.options;
+        question.charLimit = updatedQuestion.charLimit;
+        question.timer = updatedQuestion.timer;
 
         logAction(sessionCode, `PERGUNTA #${questionId} editada`);
         io.to(sessionCode).emit('questionsUpdated', session.questions);
@@ -60,52 +72,54 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
     // DUPLICAR UMA PERGUNTA
     socket.on('duplicateQuestion', ({ sessionCode, questionId }) => {
         const session = sessions[sessionCode];
-        if (!session || !session.questions[questionId]) return;
+        if (!session) return;
 
-        const originalQuestion = session.questions[questionId];
+        const originalQuestion = session.questions.find(q => q && q.id === questionId);
+        if (!originalQuestion) return;
+
+        const newQuestionId = (session.nextQuestionId || session.questions.length);
+        session.nextQuestionId = newQuestionId + 1;
+
         const newQuestion = JSON.parse(JSON.stringify(originalQuestion));
-        newQuestion.id = session.questions.length;
+        newQuestion.id = newQuestionId;
         newQuestion.results = {};
         newQuestion.createdAt = Date.now();
+        newQuestion.isConcluded = false;
 
         session.questions.push(newQuestion);
 
-        logAction(sessionCode, `PERGUNTA #${questionId} duplicada para #${newQuestion.id}`);
+        logAction(sessionCode, `PERGUNTA #${questionId} duplicada para #${newQuestionId}`);
         io.to(sessionCode).emit('questionsUpdated', session.questions);
     });
 
     // DELETAR UMA PERGUNTA
     socket.on('deleteQuestion', ({ sessionCode, questionId }) => {
         const session = sessions[sessionCode];
-        if (!session || !session.questions[questionId]) return;
+        if (!session) return;
 
         if (session.activeQuestion === questionId) {
             socket.emit('error', 'Não pode deletar pergunta ativa');
             return;
         }
 
-        // Em vez de setar para null, remove do array
-        session.questions.splice(questionId, 1);
+        const initialLength = session.questions.length;
+        // Filtra a pergunta pelo seu ID único, em vez de depender do índice.
+        session.questions = session.questions.filter(q => q && q.id !== questionId);
 
-        // Re-indexa as perguntas subsequentes
-        for (let i = questionId; i < session.questions.length; i++) {
-            session.questions[i].id = i;
+        if (session.questions.length < initialLength) {
+            logAction(sessionCode, `PERGUNTA #${questionId} deletada`);
+            // A reordenação no cliente já lida com a atualização da UI.
+            // Apenas emitimos a lista atualizada.
+            io.to(sessionCode).emit('questionsUpdated', session.questions);
         }
-
-        // Se a pergunta ativa era posterior à deletada, atualiza seu ID
-        if (session.activeQuestion !== null && session.activeQuestion > questionId) {
-            session.activeQuestion--;
-        }
-
-        logAction(sessionCode, `PERGUNTA #${questionId} deletada`);
-        io.to(sessionCode).emit('questionsUpdated', session.questions);
     });
     // INICIAR UMA PERGUNTA
     socket.on('startQuestion', ({ sessionCode, questionId }) => {
         const session = sessions[sessionCode];
-        if (session && session.questions[questionId]) {
+        const question = session ? session.questions.find(q => q && q.id === questionId) : null;
+
+        if (question) {
             session.activeQuestion = questionId;
-            const question = session.questions[questionId];
             question.results = {};
             question.acceptingAnswers = true;
             question.isConcluded = false; // Reseta o estado ao re-iniciar
@@ -131,8 +145,9 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
     // PARAR UMA PERGUNTA
     socket.on('stopQuestion', ({ sessionCode, questionId }) => {
         const session = sessions[sessionCode];
-        if (session && session.questions[questionId]) {
-            const question = session.questions[questionId];
+        const question = session ? session.questions.find(q => q && q.id === questionId) : null;
+
+        if (question) {
             question.acceptingAnswers = false;
             question.isConcluded = true; // Marca como encerrada
             
@@ -146,9 +161,10 @@ function registerQuestionHandlers(io, socket, sessions, logger) {
     // EXIBIR RESULTADOS DE UMA PERGUNTA JÁ ENCERRADA
     socket.on('showResults', ({ sessionCode, questionId }) => {
         const session = sessions[sessionCode];
-        if (session && session.questions[questionId] && session.questions[questionId].isConcluded) {
+        const question = session ? session.questions.find(q => q && q.id === questionId) : null;
+
+        if (question && question.isConcluded) {
             session.activeQuestion = questionId;
-            const question = session.questions[questionId];
             question.acceptingAnswers = false; // Não aceita novas respostas
 
             logAction(sessionCode, `EXIBINDO RESULTADOS da pergunta #${questionId}`);
