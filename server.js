@@ -38,6 +38,9 @@ app.get('/', (req, res) => {
   res.send('Backend hub is running!');
 });
 
+// Servir arquivos estáticos da pasta 'shared'
+app.use('/shared', express.static(path.join(__dirname, 'shared')));
+
 // Dynamically load routes and socket handlers from project folders
 const projectsDir = __dirname;
 fs.readdirSync(projectsDir).forEach(project => {
