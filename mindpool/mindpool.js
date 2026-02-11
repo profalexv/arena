@@ -42,7 +42,7 @@ const logger = {
 const sessions = {}; // { sessionCode: { ... } } 
 
 // ===== LÓGICA DE SOCKET.IO =====
-function initializeSocket(io) {
+function initializeSocket(nsp) {
     
     // ===== RATE LIMITING =====
     const loginAttempts = new Map(); // { ip: { count, resetTime } }
