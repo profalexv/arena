@@ -24,7 +24,7 @@ function initializeSocket(nsp) {
         registerQuestionHandlers(nsp, socket, sessions, logger);
 
         // --- SESSION MANAGEMENT ---
-        socket.on('createSession', ({ controllerPassword, presenterPassword, deadline, theme, repeatControllerPass, noPresenterPass }, callback) => {
+        socket.on('createSession', ({ controllerPassword, presenterPassword, deadline, theme, repeatControllerPass, noPresenterPass, questions: importedQuestions }, callback) => {
             if (!controllerPassword) {
                 return callback({ success: false, message: 'Senha do controller é obrigatória.' });
             }
@@ -55,6 +55,20 @@ function initializeSocket(nsp) {
                 audienceView: ['individual', 'overall', 'ranking', 'position'],
                 createdAt: Date.now()
             };
+
+            // Adiciona perguntas importadas, se houver
+            if (importedQuestions && Array.isArray(importedQuestions)) {
+                let nextId = 0;
+                importedQuestions.forEach(q => {
+                    const newQuestion = {
+                        ...q, // Assume que o formato da pergunta do arquivo é compatível
+                        id: nextId++,
+                        createdAt: Date.now()
+                    };
+                    sessions[sessionCode].questions.push(newQuestion);
+                });
+                sessions[sessionCode].nextQuestionId = nextId;
+            }
 
             logAction(sessionCode, 'CRIADA');
             callback({ success: true, sessionCode });
