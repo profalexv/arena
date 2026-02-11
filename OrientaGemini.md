@@ -1,1 +1,14 @@
-Esse repositório (pasta render) funciona como um centro de backend para vários outros projetos hospedados como repositórios individuais no gihub (as pastas estão aparecendo aqui). A ideia é que o backend rode como uma única instancia no render.com. Cada projeto individual tem sua pasta para colocar seus xxxxxx.js necessários - CADA PROJETO TERÁ O PRINCIPAL ARQUIVO js com o nome do próprio projeto na respectiva pasta no repositório render. Os projetos recebem urls (cnames) adequadas: painel.alexandre.pro.br, mindpool.alexandre.pro.br, eamos.alexandre.pro.br, aula.alexandre.pro.br, plano.alexandre.pro.br, cronograma.alexandre.pro.br. Esse repositório fica hospedado em profalexv/render (repositório privado) e roda em profalexv-alexluza.onrender.com. Cada projeto que usa o repositório atual deve ter uma pasta dedicada no mesmo. CUIDAR PARA NÃO MISTURAR OS BACKENDS DOS DIFERENTES PROJETOS. Para adicionar novos projetos deve-se tomar os cuidados para manter o padrão e NUNCA EDITAR OU MOVER ARQUIVOS DE OUTRO PROJETO. Exceto durante a implantação (remove-se esse comentário quando estiver funcionando EU REMOVO, pois precisa testar um por um os projetos) O backend deve permitir que os projetos rodem localmente para testes em desenvolvimento e no referido serviço em produção. OS projetos cronos, igreja, fastfood e vaievem não utilizam e não devem ser integrados ao render como backend (pelo menos até agora).
+Esse repositório (pasta `render`) funciona como um backend centralizado para múltiplos projetos, hospedado como uma única instância no `render.com`.
+
+**Diretrizes Gerais:**
+1.  **Estrutura:** Cada projeto integrado possui uma pasta dedicada dentro deste repositório (`render`). O arquivo de backend principal de cada projeto deve seguir o padrão `nome-do-projeto.js` dentro de sua respectiva pasta.
+2.  **Domínios:** Os projetos são servidos sob subdomínios específicos, como `painel.alexandre.pro.br`, `eamos.alexandre.pro.br`, etc.
+3.  **Ambientes:** O backend deve funcionar tanto localmente para desenvolvimento quanto em produção no `profalexv-alexluza.onrender.com`.
+4.  **Isolamento:** É crucial não misturar a lógica de backend entre os diferentes projetos. Ao adicionar um novo projeto, mantenha o padrão e não modifique arquivos de outros projetos.
+
+**Projetos Não Integrados:**
+Os projetos a seguir, embora possam estar no mesmo workspace, **não** utilizam este backend centralizado e suas pastas não devem ser modificadas no contexto do repositório `render`:
+*   `cronos`
+*   `igreja`
+*   `fastfood`
+*   `vaievem`
