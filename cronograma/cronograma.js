@@ -13,11 +13,11 @@ const router = express.Router();
 
 // --- Configuração do Banco de Dados (TiDB Cloud) ---
 const dbConfig = {
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
-    user: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME,
+    host: process.env.TIDB_HOST,
+    port: process.env.TIDB_PORT,
+    user: process.env.TIDB_USERNAME,
+    password: process.env.TIDB_PASSWORD,
+    database: process.env.TIDB_DATABASE, // Para o projeto 'cronograma', o valor será 'cronograma'
     ssl: {
         // TiDB Cloud requer conexão SSL.
         minVersion: 'TLSv1.2',
