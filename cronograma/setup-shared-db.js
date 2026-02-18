@@ -18,7 +18,7 @@ const dbConfig = {
     port: process.env.TIDB_PORT || 4000,
     user: process.env.TIDB_USERNAME,
     password: process.env.TIDB_PASSWORD,
-    database: process.env.TIDB_DATABASE, // Deve ser 'scholar'
+    database: 'scholar', // Conecta-se diretamente ao banco 'scholar'
     ssl: {
         rejectUnauthorized: false
     }
@@ -35,12 +35,6 @@ CREATE TABLE IF NOT EXISTS shared_users (
 );`;
 
 async function setupDatabase() {
-    if (!dbConfig.database) {
-        console.error('❌ ERRO: A variável de ambiente TIDB_DATABASE não está definida no arquivo .env.');
-        console.error("   Defina-a como 'scholar' para continuar.");
-        return;
-    }
-
     let connection;
     try {
         console.log(`🔄 Conectando ao banco de dados compartilhado '${dbConfig.database}'...`);
