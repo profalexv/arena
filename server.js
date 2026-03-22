@@ -11,16 +11,19 @@ const server = http.createServer(app);
 // Configuração de CORS dinâmica para Socket.IO
 const getOrigins = () => {
     const origins = [
+        "https://mindpool.axom.app",
+        "http://mindpool.axom.app",
+        "https://arena.axom.app",
+        "http://arena.axom.app",
+        "https://proof.axom.app",
+        "http://proof.axom.app",
+        // Origens legadas (mantidas para compatibilidade durante transição)
         "https://mindpool.alexandre.pro.br",
         "http://mindpool.alexandre.pro.br",
-        "https://www.mindpool.alexandre.pro.br",
-        "http://www.mindpool.alexandre.pro.br",
         "https://eamos.alexandre.pro.br",
         "http://eamos.alexandre.pro.br",
-        "https://www.eamos.alexandre.pro.br",
-        "http://www.eamos.alexandre.pro.br",
-        "http://localhost:3000", // Local
-        "http://localhost:*" // Qualquer porta local
+        "http://localhost:3000",
+        "http://localhost:*"
     ];
     return origins;
 };
@@ -37,6 +40,16 @@ const io = new Server(server, {
 app.get('/', (req, res) => {
   res.send('Backend hub is running!');
 });
+
+// Middleware de parsing para rotas HTTP (REST)
+app.use(express.json({ limit: '512kb' }));
+
+// ── Rotas HTTP — Quiz Premium ──────────────────────────────────
+// CRUD de questionários salvos na nuvem (requer auth premium via motor)
+const createQuestionnairesRouter = require('./shared/questionnairesRouter');
+app.use('/arena/questionnaires',    createQuestionnairesRouter('arena'));
+app.use('/mindpool/questionnaires', createQuestionnairesRouter('mindpool'));
+app.use('/proof/questionnaires',    createQuestionnairesRouter('proof'));
 
 // Servir arquivos estáticos da pasta 'shared'
 app.use('/shared', express.static(path.join(__dirname, 'shared')));
