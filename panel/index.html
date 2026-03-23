@@ -39,6 +39,7 @@
     </div>
     <button id="login-btn">Entrar</button>
     <div id="login-error"></div>
+    <div id="login-info"></div>
   </div>
 </div>
 
@@ -229,22 +230,37 @@
 
   // ── Login ──────────────────────────────────────────────────
   function tryLogin(s) {
+    const infoEl  = document.getElementById('login-info');
+    const errorEl = document.getElementById('login-error');
+    const btn     = document.getElementById('login-btn');
+    errorEl.textContent = '';
+    infoEl.textContent  = 'Conectando…';
+    btn.disabled = true;
+    const wakeTimer = setTimeout(() => {
+      infoEl.textContent = '⚡ O servidor pode estar acordando (free tier). Aguarde…';
+    }, 4000);
     fetch('/panel/stats', { headers: { 'x-panel-secret': s } })
       .then(r => {
         if (!r.ok) throw new Error('Senha incorreta');
         return r.json();
       })
       .then(data => {
+        clearTimeout(wakeTimer);
+        btn.disabled = false;
+        infoEl.textContent = '';
         secret = s;
         sessionStorage.setItem('panel_secret', s);
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('app').style.display = '';
-        document.getElementById('login-error').textContent = '';
+        errorEl.textContent = '';
         renderStats(data);
         connectSocket(s);
       })
       .catch(err => {
-        document.getElementById('login-error').textContent = err.message;
+        clearTimeout(wakeTimer);
+        btn.disabled = false;
+        infoEl.textContent = '';
+        errorEl.textContent = err.message;
       });
   }
 

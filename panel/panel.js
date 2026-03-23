@@ -15,10 +15,17 @@
  */
 const express      = require('express');
 const path         = require('path');
+const cors         = require('cors');
 const sessionStats = require('../shared/sessionStats');
 const supabase     = require('../shared/supabaseMain');
 
 const router = express.Router();
+
+const PANEL_CORS = cors({
+    origin: ['https://panel.zukon.tech', 'http://localhost:3000'],
+    methods: ['GET'],
+    allowedHeaders: ['x-panel-secret'],
+});
 
 const MOTOR_URL    = process.env.MOTOR_URL    || 'https://aula-motor.fly.dev';
 const PANEL_SECRET = process.env.PANEL_SECRET || '';
@@ -94,7 +101,7 @@ router.get('/style.css', (req, res) => {
 });
 
 // ── REST endpoint ─────────────────────────────────────────────
-router.get('/stats', panelAuth, async (_req, res) => {
+router.get('/stats', PANEL_CORS, panelAuth, async (_req, res) => {
     try {
         res.json(await buildPayload());
     } catch (err) {
