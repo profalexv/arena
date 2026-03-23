@@ -89,6 +89,9 @@ async function buildPayload() {
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
+router.get('/style.css', (req, res) => {
+    res.sendFile(path.join(__dirname, 'style.css'));
+});
 
 // ── REST endpoint ─────────────────────────────────────────────
 router.get('/stats', panelAuth, async (_req, res) => {
