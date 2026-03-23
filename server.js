@@ -17,11 +17,8 @@ const getOrigins = () => {
         "http://arena.axom.app",
         "https://proof.axom.app",
         "http://proof.axom.app",
-        // Origens legadas (mantidas para compatibilidade durante transição)
-        "https://mindpool.alexandre.pro.br",
-        "http://mindpool.alexandre.pro.br",
-        "https://eamos.alexandre.pro.br",
-        "http://eamos.alexandre.pro.br",
+        "https://cronos.axom.app",
+        "http://cronos.axom.app",
         "http://localhost:3000",
         "http://localhost:*"
     ];

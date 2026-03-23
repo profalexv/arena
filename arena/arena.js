@@ -1,15 +1,15 @@
 const { registerQuestionHandlers } = require('./questions');
 
 // This is a simplified version based on mindpool.js
-// You should adapt it with the full logic for EAMOS sessions.
+// You should adapt it with the full logic for Arena sessions.
 
 const logger = {
-    info: (msg) => console.log(`[EAMOS][INFO] ${new Date().toISOString()} - ${msg}`),
-    warn: (msg) => console.warn(`[EAMOS][WARN] ${new Date().toISOString()} - ${msg}`),
-    error: (msg) => console.error(`[EAMOS][ERROR] ${new Date().toISOString()} - ${msg}`)
+    info: (msg) => console.log(`[Arena][INFO] ${new Date().toISOString()} - ${msg}`),
+    warn: (msg) => console.warn(`[Arena][WARN] ${new Date().toISOString()} - ${msg}`),
+    error: (msg) => console.error(`[Arena][ERROR] ${new Date().toISOString()} - ${msg}`)
 };
 
-const sessions = {}; // In-memory session storage for EAMOS
+const sessions = {}; // In-memory session storage for Arena
 
 function initializeSocket(nsp) {
 
@@ -18,7 +18,7 @@ function initializeSocket(nsp) {
     };
 
     nsp.on('connection', (socket) => {
-        logger.info(`User connected to EAMOS namespace: ${socket.id}`);
+        logger.info(`User connected to Arena namespace: ${socket.id}`);
 
         // Register question-related event handlers
         registerQuestionHandlers(nsp, socket, sessions, logger);
@@ -126,7 +126,7 @@ function initializeSocket(nsp) {
             const session = sessions[sessionCode];
             if (!session) return callback({ success: false, message: 'Sessão não encontrada.' });
 
-            // In EAMOS, audience might need a password. Let's assume it's the presenter's password for now.
+            // In Arena, audience might need a password. Let's assume it's the presenter's password for now.
             // This logic might need refinement based on your exact requirements.
             if (session.presenterPassword && session.presenterPassword !== password) {
                 return callback({ success: false, message: 'Senha da sessão incorreta.' });
@@ -191,12 +191,12 @@ function initializeSocket(nsp) {
                 logAction(sessionCode, 'Presenter desconectado.');
             }
 
-            logger.info(`User disconnected from EAMOS: ${socket.id}`);
+            logger.info(`User disconnected from Arena: ${socket.id}`);
         });
 
     });
 
-    logger.info("EAMOS Socket.IO Namespace Initialized");
+    logger.info("Arena Socket.IO Namespace Initialized");
 }
 
 module.exports = { initializeSocket };

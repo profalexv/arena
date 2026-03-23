@@ -4,7 +4,7 @@
  * Módulo responsável por registrar e gerenciar todos os eventos
  * de Socket.IO relacionados a perguntas do Proof (criar, editar, deletar, reordenar).
  *
- * Idêntico ao eamos/questions.js — reutilizado sem alteração.
+ * Idêntico ao arena/questions.js — reutilizado sem alteração.
  */
 
 function registerQuestionHandlers(nsp, socket, sessions, logger) {
