@@ -52,20 +52,21 @@ body {
 .input-wrap input {
   width: 100%; padding-right: 2.75rem; margin-bottom: 0;
 }
-.input-wrap button {
-  position: absolute; right: .6rem; top: 50%; transform: translateY(-50%);
+#toggle-pw {
+  position: absolute; right: .65rem; top: 50%; transform: translateY(-50%);
   background: none; border: none; cursor: pointer;
-  font-size: 1rem; line-height: 1; padding: 0; width: auto;
-  color: var(--muted);
-  transition: opacity .2s;
+  font-size: .85rem; line-height: 1; padding: .25rem;
+  width: auto; color: var(--muted);
+  border-radius: 4px; transition: color .2s;
 }
-.input-wrap button:hover { opacity: .7; }
-.login-box button {
+#toggle-pw:hover { color: var(--text); }
+#login-btn {
   width: 100%; padding: .7rem;
   background: var(--accent); border: none; border-radius: 8px;
   color: #fff; font-size: .95rem; font-weight: 600; cursor: pointer;
+  margin-bottom: 0;
 }
-.login-box button:hover { opacity: .85; }
+#login-btn:hover { opacity: .85; }
 #login-error { color: var(--red); font-size: .8rem; margin-top: .75rem; min-height: 1em; }
 
 /* ── Header ── */

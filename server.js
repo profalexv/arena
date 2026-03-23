@@ -22,6 +22,7 @@ const getOrigins = () => {
         "http://proof.axom.app",
         "https://cronos.axom.app",
         "http://cronos.axom.app",
+        "https://panel.zukon.tech",
         "http://localhost:3000",
         "http://localhost:*"
     ];
