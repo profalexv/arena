@@ -4,6 +4,9 @@ const path = require('path');
 const http = require('http');
 const { Server } = require("socket.io");
 
+const sessionStats = require('./shared/sessionStats');
+const ioRef        = require('./shared/ioRef');
+
 const app = express();
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
@@ -25,7 +28,7 @@ const getOrigins = () => {
     return origins;
 };
 
-const io = new Server(server, {
+const io = new Server(server, { // eslint-disable-line
     cors: {
         origin: getOrigins(),
         methods: ["GET", "POST"],
@@ -33,6 +36,8 @@ const io = new Server(server, {
     },
     allowEIO3: true
 });
+
+ioRef.set(io);
 
 app.get('/', (req, res) => {
   res.send('Backend hub is running!');
@@ -74,7 +79,8 @@ fs.readdirSync(projectsDir).forEach(project => {
       if (projectModule.initializeSocket) {
         // Create a dedicated namespace for the project
         const nsp = io.of(`/${project}`);
-        projectModule.initializeSocket(nsp); // Pass the namespace, not the global io
+        projectModule.initializeSocket(nsp);
+        sessionStats.hookNamespace(nsp, project);
         console.log(`Initialized Socket.IO namespace for /${project}`);
       }
     }
