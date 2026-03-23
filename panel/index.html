@@ -16,7 +16,10 @@
   <div class="login-box">
     <h1>ZUKON <span style="color:var(--accent)">Panel</span></h1>
     <p>Monitor interno · uso restrito</p>
-    <input type="password" id="secret-input" placeholder="Senha de acesso" autocomplete="current-password">
+    <div class="input-wrap">
+      <input type="password" id="secret-input" placeholder="Senha de acesso" autocomplete="current-password">
+      <button type="button" id="toggle-pw" aria-label="Mostrar senha" title="Mostrar senha">👁</button>
+    </div>
     <button id="login-btn">Entrar</button>
     <div id="login-error"></div>
   </div>
@@ -246,6 +249,21 @@
 
   // ── Auto-login se já tem secret salvo ─────────────────────
   if (secret) tryLogin(secret);
+
+  // ── Toggle mostrar/ocultar senha ─────────────────────────
+  document.getElementById('toggle-pw').addEventListener('click', () => {
+    const inp = document.getElementById('secret-input');
+    const btn = document.getElementById('toggle-pw');
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      btn.textContent = '🙈';
+      btn.title = 'Ocultar senha';
+    } else {
+      inp.type = 'password';
+      btn.textContent = '👁';
+      btn.title = 'Mostrar senha';
+    }
+  });
 </script>
 </body>
 </html>

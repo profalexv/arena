@@ -46,6 +46,20 @@ body {
   outline: none; margin-bottom: 1rem;
 }
 .login-box input:focus { border-color: var(--accent); }
+.input-wrap {
+  position: relative; margin-bottom: 1rem;
+}
+.input-wrap input {
+  width: 100%; padding-right: 2.75rem; margin-bottom: 0;
+}
+.input-wrap button {
+  position: absolute; right: .6rem; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  font-size: 1rem; line-height: 1; padding: 0; width: auto;
+  color: var(--muted);
+  transition: opacity .2s;
+}
+.input-wrap button:hover { opacity: .7; }
 .login-box button {
   width: 100%; padding: .7rem;
   background: var(--accent); border: none; border-radius: 8px;
