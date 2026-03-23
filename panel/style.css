@@ -21,6 +21,49 @@ body {
   padding: 1.5rem;
 }
 
+/* ── Apps Bar ── */
+#apps-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+  padding: .6rem 1.25rem;
+  background: rgba(15,17,23,.92);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border);
+  font-size: .78rem;
+}
+.apps-group {
+  display: flex; align-items: center; gap: .4rem; flex-wrap: wrap;
+}
+.apps-label {
+  font-size: .65rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+  margin-right: .25rem;
+}
+.app-btn {
+  display: inline-block;
+  padding: .28rem .75rem;
+  border-radius: 6px;
+  font-size: .75rem; font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: opacity .15s, border-color .15s;
+}
+.app-btn:hover { opacity: .8; }
+.app-btn.edu {
+  background: rgba(91,143,249,.12);
+  color: #7aa8ff;
+  border-color: rgba(91,143,249,.25);
+}
+.app-btn.edu:hover { border-color: rgba(91,143,249,.5); }
+.app-btn.hrm {
+  background: rgba(62,207,142,.12);
+  color: #3ecf8e;
+  border-color: rgba(62,207,142,.25);
+}
+.app-btn.hrm:hover { border-color: rgba(62,207,142,.5); }
+
+body { padding-bottom: 3.5rem; }
+
 /* ── Login overlay ── */
 #login-screen {
   position: fixed; inset: 0;
