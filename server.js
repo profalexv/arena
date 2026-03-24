@@ -51,6 +51,7 @@ const APP_HOSTS = {
     'arena.axom.app':    'arena',
     'mindpool.axom.app': 'mindpool',
     'proof.axom.app':    'proof',
+    'panel.zukon.tech':  'panel',
 };
 
 // Middleware de roteamento por hostname (deve vir ANTES das rotas de API)
