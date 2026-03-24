@@ -1,0 +1,7 @@
+/* --- Admin Page --- */
+.admin-page .form-section { display: none; }
+.admin-page .form-section.active { display: block; }
+.admin-page .form-header { position: relative; margin-bottom: 1rem; min-height: 40px; }
+.admin-page .back-button { position: absolute; top: 0; left: 0; }
+#error-message { color: var(--danger-color); font-weight: bold; padding: 10px; margin-bottom: 15px; border-radius: 4px; background-color: color-mix(in srgb, var(--danger-color) 15%, transparent); display: none; border-left: 4px solid var(--danger-color); }
+#error-message:not(:empty) { display: block; }

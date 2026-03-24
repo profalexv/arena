@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+    <title>Proof — Painel de Controle</title>
+    <link rel="stylesheet" href="../styles/proof.css">
+    <link rel="stylesheet" href="../styles/controller.css">
+    <style>
+        .form-column { overflow-y: auto; height: calc(100vh - 80px); }
+        #session-code-container:hover { text-decoration: underline; }
+        #header-grades-summary {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 0 1.5rem;
+            font-size: 0.95rem;
+        }
+        .grade-stat { display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
+        .grade-stat strong { font-size: 1.2rem; }
+        .grade-stat span { font-size: 0.75rem; opacity: 0.8; }
+        #progress-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        #progress-modal-content { background: var(--container-bg); padding: 2rem; border-radius: 12px; width: 90%; max-width: 900px; max-height: 90vh; overflow-y: auto; position: relative; }
+        #progress-modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.5rem; color: var(--text-color); cursor: pointer; z-index: 2001; }
+        /* Grades table */
+        .grades-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; }
+        .grades-table th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--primary-color); color: var(--primary-color); }
+        .grades-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+        .grades-table tr:last-child td { border-bottom: none; }
+        .grade-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; }
+        .grade-badge.passed { background: #d4edda; color: #155724; }
+        .grade-badge.failed { background: #f8d7da; color: #721c24; }
+        .grade-badge.pending { background: #fff3cd; color: #856404; }
+        .grade-provisional { opacity: 0.6; font-style: italic; }
+        .dynamic-input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .dynamic-input-row input[type="text"] { flex-grow: 1; margin-bottom: 0; }
+        .dynamic-input-row .remove-btn { padding: 5px 10px; background-color: #eee; color: #333; font-weight: bold; border-radius: 4px; }
+        .text-button { background: none; border: none; color: var(--primary-color); cursor: pointer; padding: 5px 0; font-weight: bold; text-align: left; width: 100%; }
+        .skip-logic-config .type-config { display: none; }
+        #scholar-btn { background: linear-gradient(135deg, #6e45e2, #88d3ce); color: #fff; }
+        #scholar-btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body class="controller-page">
+    <header class="controller-header">
+        <h1 id="session-code-container" title="Copiar link de acesso para participantes">
+            Proof <span id="session-code"></span>
+        </h1>
+        <div id="header-grades-summary">
+            <!-- Estatísticas de notas inseridas pelo controller.js -->
+        </div>
+        <div class="session-management">
+            <div class="controls-group">
+                <span id="audience-counter" title="Participantes na sessão"></span>
+                <label for="session-theme-switcher">Tema:</label>
+                <select id="session-theme-switcher">
+                    <option value="light">Claro</option>
+                    <option value="dark">Escuro</option>
+                    <option value="corporate">Corporativo</option>
+                    <option value="fun">Divertido</option>
+                    <option value="sublime">Sublime</option>
+                </select>
+            </div>
+            <div class="controls-group">
+                <button id="open-presenter-btn">Abrir Projeção</button>
+                <button id="toggle-url-btn" class="secondary-button">Exibir Endereço</button>
+                <button id="export-csv-btn" class="secondary-button" title="Exportar notas como CSV">📥 Exportar CSV</button>
+                <button id="scholar-btn" class="secondary-button" style="display: none;" title="Enviar notas ao sistema escolar">🎓 Enviar ao Scholar</button>
+                <button id="reset-all-btn" class="secondary-button" title="Zerar o progresso de todos">Zerar Todos</button>
+                <button id="end-session-btn" class="danger">Encerrar</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="controller-main-content">
+        <!-- Coluna de criação de perguntas -->
+        <div class="form-column">
+            <div class="question-form">
+                <h2>Criar Nova Pergunta</h2>
+
+                <label for="question-text">Texto da Pergunta</label>
+                <input type="text" id="question-text" placeholder="Ex: Qual a capital do Brasil?">
+
+                <label for="question-image">URL de Imagem (Opcional)</label>
+                <input type="text" id="question-image" placeholder="https://exemplo.com/imagem.png">
+
+                <label for="media-url">URL de Mídia (Vídeo/YouTube - Opcional)</label>
+                <input type="text" id="media-url" placeholder="https://youtube.com/watch?v=...">
+
+                <div id="text-answer-config" class="type-config">
+                    <label for="correct-answer">Resposta Correta</label>
+                    <input type="text" id="correct-answer" placeholder="Resposta principal">
+                    <div id="additional-answers-container"></div>
+                    <button id="add-answer-btn" class="text-button">+ Outra resposta aceita</button>
+                </div>
+
+                <label for="question-type">Tipo de Resposta</label>
+                <select id="question-type">
+                    <option value="options">Opções (múltipla escolha)</option>
+                    <option value="yes_no">Sim / Não</option>
+                    <option value="short_text" selected>Texto Curto</option>
+                    <option value="long_text">Texto Longo</option>
+                    <option value="number">Número</option>
+                    <option value="integer">Número Inteiro</option>
+                </select>
+
+                <div id="options-config" class="type-config">
+                    <label>Opções</label>
+                    <div id="options-list"></div>
+                    <button id="add-option-btn" class="text-button">+ Adicionar opção</button>
+                    <div id="mcq-logic-config" style="margin-top: 1rem; border-top: 1px solid #eee; padding-top: 1rem;">
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="mcq-accept-multiple"> Aceitar múltiplas respostas corretas
+                        </label>
+                        <label id="mcq-require-all-label" style="cursor: pointer; display: none; align-items: center; gap: 8px; margin-left: 20px;">
+                            <input type="checkbox" id="mcq-require-all"> Exigir todas as respostas corretas
+                        </label>
+                    </div>
+                </div>
+
+                <div id="text-config" class="type-config">
+                    <label for="char-limit">Limite de Caracteres</label>
+                    <input type="number" id="char-limit" placeholder="Ex: 50">
+                </div>
+
+                <div class="skip-logic-config">
+                    <h4 style="margin-bottom: 0.5rem; margin-top: 1.5rem;">Lógica de Pulo (Opcional)</h4>
+                    <div id="skip-config-yesno" class="type-config">
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="skip-on-wrong" checked> Pular automaticamente se errar
+                        </label>
+                    </div>
+                    <div id="skip-config-mcq-number" class="type-config">
+                        <label for="auto-skip-attempts-mcq">Pular após X tentativas erradas</label>
+                        <input type="number" id="auto-skip-attempts-mcq" placeholder="Ex: 3">
+                    </div>
+                    <div id="skip-config-text" class="type-config">
+                        <label for="allow-skip-attempts">Permitir pular após X tentativas</label>
+                        <input type="number" id="allow-skip-attempts" placeholder="Ex: 2">
+                        <label for="auto-skip-attempts-text" style="margin-top: 10px;">Pular automaticamente após X tentativas</label>
+                        <input type="number" id="auto-skip-attempts-text" placeholder="Ex: 5">
+                    </div>
+                </div>
+
+                <div class="timer-config">
+                    <label class="timer-toggle">
+                        <input type="checkbox" id="timer-enabled"> Habilitar Cronômetro
+                    </label>
+                    <div id="timer-options">
+                        <label for="timer-duration">Duração (minutos)</label>
+                        <input type="number" id="timer-duration" placeholder="Ex: 1">
+                        <label class="timer-audience-toggle">
+                            <input type="checkbox" id="timer-show-audience"> Exibir para os alunos
+                        </label>
+                    </div>
+                </div>
+
+                <button id="create-question-btn">Criar Pergunta</button>
+                <button id="cancel-edit-btn" class="secondary-button" style="display: none; margin-top: 10px;">Cancelar Edição</button>
+            </div>
+        </div>
+
+        <!-- Coluna de lista de perguntas + notas -->
+        <div class="list-column">
+            <div class="question-list">
+                <div class="list-header">
+                    <h2>Perguntas</h2>
+                    <div class="list-header-buttons">
+                        <button id="load-questions-btn" class="secondary-button">Carregar</button>
+                        <button id="save-questions-btn" class="secondary-button">Salvar</button>
+                    </div>
+                </div>
+                <div id="questions-container">
+                    <p>Nenhuma pergunta criada ainda.</p>
+                </div>
+            </div>
+            <div class="audience-list">
+                <div id="audience-list-container"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="toast-container"></div>
+
+    <!-- Modal de notas -->
+    <div id="progress-modal-overlay" style="display: none;">
+        <div id="progress-modal-content">
+            <button id="progress-modal-close">✕</button>
+            <div id="progress-modal-body"></div>
+        </div>
+    </div>
+
+    <input type="file" id="load-questions-input" accept=".json" style="display: none;">
+    <audio id="notification-sound" preload="auto"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        (function() {
+            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const backendHost = isDevelopment ? 'http://localhost:3000' : '';
+            document.write(`<script src="${backendHost}/shared/scripts/cronometro.js"><\/script>`);
+        })();
+    </script>
+    <script>window.QUIZ_APP_TYPE = 'proof';</script>
+    <script src="../scripts/quiz-cloud.js"></script>
+    <script src="../scripts/quiz-cloud-ui.js"></script>
+    <script src="../scripts/controller.js"></script>
+</body>
+</html>

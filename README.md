@@ -55,7 +55,7 @@ render/ (render.com → profalexv-alexluza.onrender.com)
 |---|---|
 | **Backend** | https://profalexv-alexluza.onrender.com |
 | **Supabase** | `rgiaryfatyvsfgqjubmh` (São Paulo) — tabela `quiz_questionnaires` |
-| **Motor** (JWT verify) | https://aula-motor.fly.dev |
+| **Login/API** (JWT verify) | https://axom.fly.dev |
 
 ---
 
@@ -90,7 +90,7 @@ render/ (render.com → profalexv-alexluza.onrender.com)
 | `SUPABASE_SERVICE_KEY` | Chave de serviço (service_role) Supabase principal |
 | `SUPABASE_QUIZ_URL` | URL da instância Supabase de questionários (Arena/MindPool/Proof) |
 | `SUPABASE_QUIZ_KEY` | Chave de serviço Supabase questionários |
-| `MOTOR_URL` | URL do motor para verificação de JWT (`https://aula-motor.fly.dev`) |
+| `MOTOR_URL` | URL do backend para verificação de JWT (`https://axom.fly.dev`) |
 | `NODE_ENV` | `production` |
 | `PORT` | Atribuído pelo render.com |
 

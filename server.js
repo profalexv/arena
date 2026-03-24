@@ -23,6 +23,7 @@ const getOrigins = () => {
         "https://cronos.axom.app",
         "http://cronos.axom.app",
         "https://panel.zukon.tech",
+        "https://profalexv-alexluza.onrender.com",
         "http://localhost:3000",
         "http://localhost:*"
     ];
@@ -40,9 +41,42 @@ const io = new Server(server, { // eslint-disable-line
 
 ioRef.set(io);
 
-app.get('/', (req, res) => {
-  res.send('Backend hub is running!');
+// ── Frontends estáticos — roteamento por hostname ─────────────
+// arena.axom.app   → serve render/arena/
+// mindpool.axom.app → serve render/mindpool/
+// proof.axom.app   → serve render/proof/
+// qualquer outro   → landing page pública em render/public/
+
+const APP_HOSTS = {
+    'arena.axom.app':    'arena',
+    'mindpool.axom.app': 'mindpool',
+    'proof.axom.app':    'proof',
+};
+
+// Middleware de roteamento por hostname (deve vir ANTES das rotas de API)
+app.use((req, res, next) => {
+    const host = req.hostname;
+    const appName = APP_HOSTS[host];
+    if (!appName) return next();
+
+    const frontendPath = path.join(__dirname, appName);
+    const filePath = path.join(frontendPath, req.path);
+
+    // Se o arquivo existir, serve diretamente
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+        return res.sendFile(filePath);
+    }
+    // Fallback: index.html do app (SPA)
+    return res.sendFile(path.join(frontendPath, 'index.html'));
 });
+
+// Raiz → landing page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Servir landing page pública
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Middleware de parsing para rotas HTTP (REST)
 app.use(express.json({ limit: '512kb' }));
