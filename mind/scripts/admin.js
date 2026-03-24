@@ -14,9 +14,9 @@ const CONNECTION_STATUS = {
 };
 
 const SESSION_STORAGE_KEYS = {
-    CODE: 'mindpool_session_code',
-    CONTROLLER_PASS: 'mindpool_session_pass',
-    PRESENTER_PASS: 'mindpool_presenter_pass',
+    CODE: 'mind_session_code',
+    CONTROLLER_PASS: 'mind_session_pass',
+    PRESENTER_PASS: 'mind_presenter_pass',
 };
 
 // ===== MÓDULO DE UI =====
@@ -700,9 +700,9 @@ createSessionBtn?.addEventListener('click', () => {
         
         if (response.success) {
             questionsToImport = []; // Limpa após o uso
-            sessionStorage.setItem('mindpool_session_code', response.sessionCode);
-            sessionStorage.setItem('mindpool_session_pass', controllerPassword);
-            sessionStorage.setItem('mindpool_presenter_pass', presenterPassword);
+            sessionStorage.setItem('mind_session_code', response.sessionCode);
+            sessionStorage.setItem('mind_session_pass', controllerPassword);
+            sessionStorage.setItem('mind_presenter_pass', presenterPassword);
 
             window.location.href = `controller.html?session=${response.sessionCode}`;
         } else {
@@ -725,11 +725,11 @@ joinSessionBtn?.addEventListener('click', () => {
 
     const roleToJoin = role || 'controller';
     // Armazena a senha na chave correta para a role que está entrando
-    sessionStorage.setItem('mindpool_session_code', sessionCode);
+    sessionStorage.setItem('mind_session_code', sessionCode);
     if (roleToJoin === 'presenter') {
-        sessionStorage.setItem('mindpool_presenter_pass', password);
+        sessionStorage.setItem('mind_presenter_pass', password);
     } else {
-        sessionStorage.setItem('mindpool_session_pass', password);
+        sessionStorage.setItem('mind_session_pass', password);
     }
 
     const targetPage = roleToJoin === 'controller' ? 'controller' : roleToJoin;

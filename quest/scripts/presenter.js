@@ -10,9 +10,9 @@ const socket = io(socketUrl, {
     reconnectionAttempts: 5
 });
 
-const sessionCode = sessionStorage.getItem('proof_session_code');
-const presenterPass = sessionStorage.getItem('proof_presenter_pass');
-const sessionPass = sessionStorage.getItem('proof_session_pass');
+const sessionCode = sessionStorage.getItem('quest_session_code');
+const presenterPass = sessionStorage.getItem('quest_presenter_pass');
+const sessionPass = sessionStorage.getItem('quest_session_pass');
 
 let presenterState = {
     users: {},
@@ -157,7 +157,7 @@ joinBtn?.addEventListener('click', () => {
     const code = presenterCodeInput?.value?.trim();
     const pass = presenterPassInput?.value?.trim();
     if (!code || !pass) { if (loginFeedback) loginFeedback.innerText = 'Preencha o código e a senha.'; return; }
-    sessionStorage.setItem('proof_session_code', code);
-    sessionStorage.setItem('proof_presenter_pass', pass);
+    sessionStorage.setItem('quest_session_code', code);
+    sessionStorage.setItem('quest_presenter_pass', pass);
     socket.emit('joinAdminSession', { sessionCode: code, password: pass, role: 'presenter' });
 });

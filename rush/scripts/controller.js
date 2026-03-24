@@ -111,7 +111,7 @@ const ui = {
 
     init(socketHandler) {
         const sessionCode = new URLSearchParams(window.location.search).get('session');
-        const presenterPassword = sessionStorage.getItem('arena_presenter_pass');
+        const presenterPassword = sessionStorage.getItem('rush_presenter_pass');
 
         if (this.elements.sessionCodeDisplay) {
             this.elements.sessionCodeDisplay.innerText = sessionCode;
@@ -192,7 +192,7 @@ const ui = {
             if (presenterPassword) {
                 this.elements.openPresenterBtn.addEventListener('click', () => {
                     // Usa localStorage para passar a senha para a nova aba de forma segura
-                    localStorage.setItem('arena_temp_pass', presenterPassword);
+                    localStorage.setItem('rush_temp_pass', presenterPassword);
                     window.open(`presenter.html?session=${sessionCode}`, '_blank');
                 });
             } else {
@@ -837,8 +837,8 @@ const ui = {
         const sessionSettings = {
             theme: this.elements.sessionThemeSwitcher.value,
             // Inclui as senhas para facilitar a recriação da sessão
-            controllerPassword: sessionStorage.getItem('arena_session_pass') || '',
-            presenterPassword: sessionStorage.getItem('arena_presenter_pass') || ''
+            controllerPassword: sessionStorage.getItem('rush_session_pass') || '',
+            presenterPassword: sessionStorage.getItem('rush_presenter_pass') || ''
         };
 
         const exportData = {
@@ -1163,7 +1163,7 @@ const socketHandler = {
 
     joinSession: () => {
         const sessionCode = new URLSearchParams(window.location.search).get('session');
-        const sessionPassword = sessionStorage.getItem('arena_session_pass');
+        const sessionPassword = sessionStorage.getItem('rush_session_pass');
         if (!sessionPassword) {
             alert('Erro de autenticação. Por favor, volte e entre na sessão novamente.');
             window.location.href = `admin.html?role=controller`;

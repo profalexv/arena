@@ -228,13 +228,13 @@ createSessionBtn?.addEventListener('click', () => {
 
         if (response.success) {
             questionsToImport = [];
-            sessionStorage.setItem('proof_session_code', response.sessionCode);
-            sessionStorage.setItem('proof_session_pass', controllerPassword);
+            sessionStorage.setItem('quest_session_code', response.sessionCode);
+            sessionStorage.setItem('quest_session_pass', controllerPassword);
 
             let presenterPassForStorage = '';
             if (repeatControllerPass) presenterPassForStorage = controllerPassword;
             else if (!noPresenterPass) presenterPassForStorage = presenterPassword;
-            sessionStorage.setItem('proof_presenter_pass', presenterPassForStorage);
+            sessionStorage.setItem('quest_presenter_pass', presenterPassForStorage);
 
             window.location.href = `controller.html?session=${response.sessionCode}`;
         } else {
@@ -252,11 +252,11 @@ joinSessionBtn?.addEventListener('click', () => {
     if (role !== 'presenter' && !password) { showError('A senha é obrigatória.'); return; }
 
     const roleToJoin = role || 'controller';
-    sessionStorage.setItem('proof_session_code', sessionCode);
+    sessionStorage.setItem('quest_session_code', sessionCode);
     if (roleToJoin === 'presenter') {
-        sessionStorage.setItem('proof_presenter_pass', password);
+        sessionStorage.setItem('quest_presenter_pass', password);
     } else {
-        sessionStorage.setItem('proof_session_pass', password);
+        sessionStorage.setItem('quest_session_pass', password);
     }
 
     const targetPage = roleToJoin === 'controller' ? 'controller' : roleToJoin;

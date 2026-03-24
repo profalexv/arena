@@ -8,7 +8,7 @@
  *   3. Modal de biblioteca (listar, salvar, carregar, excluir questionários).
  *
  * Dependência: quiz-cloud.js (deve ser carregado antes deste script).
- * window.QUIZ_APP_TYPE deve ser 'rush' ou 'mindpool'.
+ * window.QUIZ_APP_TYPE deve ser 'rush' ou 'mind'.
  *
  * Expõe: window.QuizCloudUI
  *  - onQuestionsLoaded(fn) — registra callback chamado ao carregar questionário da nuvem

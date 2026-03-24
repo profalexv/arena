@@ -8,7 +8,7 @@
  * Expõe o objeto global `QuizCloud`.
  *
  * Configuração:
- *   - window.QUIZ_APP_TYPE deve ser 'arena' ou 'mindpool' (definido via script inline)
+ *   - window.QUIZ_APP_TYPE deve ser 'quest' ou 'mind' (definido via script inline)
  */
 
 const QuizCloud = (() => {

@@ -31,17 +31,17 @@ function applyTheme(theme = 'light') {
 
 function getPresenterPassword() {
     // 1. Verifica se uma senha temporária foi passada pela aba do Controller via localStorage.
-    const tempPass = localStorage.getItem('arena_temp_pass');
+    const tempPass = localStorage.getItem('rush_temp_pass');
     if (tempPass) {
         console.log('INFO: Senha temporária do controller encontrada, movendo para sessionStorage.');
-        sessionStorage.setItem('arena_presenter_pass', tempPass);
+        sessionStorage.setItem('rush_presenter_pass', tempPass);
         // Não removemos o item do localStorage para permitir que a prévia no controller
         // funcione de forma consistente mesmo após recarregar a página.
     }
 
     // 2. Retorna a senha do presenter do sessionStorage.
     // Ela foi definida pelo passo 1 ou por um login direto na página de admin.
-    const password = sessionStorage.getItem('arena_presenter_pass');
+    const password = sessionStorage.getItem('rush_presenter_pass');
     if (!password) {
         console.error('ERRO CRÍTICO: Nenhuma senha de presenter encontrada para autenticação.');
     }

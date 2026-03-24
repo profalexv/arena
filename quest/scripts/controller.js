@@ -11,9 +11,9 @@ const socket = io(socketUrl, {
 });
 
 // ===== ESTADO =====
-const sessionCode = sessionStorage.getItem('proof_session_code');
-const sessionPass = sessionStorage.getItem('proof_session_pass');
-const presenterPass = sessionStorage.getItem('proof_presenter_pass');
+const sessionCode = sessionStorage.getItem('quest_session_code');
+const sessionPass = sessionStorage.getItem('quest_session_pass');
+const presenterPass = sessionStorage.getItem('quest_presenter_pass');
 
 let sessionState = {
     users: {},
@@ -526,7 +526,7 @@ socket.on('adminJoined', (data) => {
     checkScholarAccess();
 
     if (sessionCode !== sessionState.sessionCode) {
-        sessionStorage.setItem('proof_session_code', sessionState.sessionCode);
+        sessionStorage.setItem('quest_session_code', sessionState.sessionCode);
     }
 });
 
@@ -576,9 +576,9 @@ socket.on('error', (message) => {
 
 socket.on('sessionEnded', () => {
     alert('Sessão encerrada.');
-    sessionStorage.removeItem('proof_session_code');
-    sessionStorage.removeItem('proof_session_pass');
-    sessionStorage.removeItem('proof_presenter_pass');
+    sessionStorage.removeItem('quest_session_code');
+    sessionStorage.removeItem('quest_session_pass');
+    sessionStorage.removeItem('quest_presenter_pass');
     window.location.href = '../index.html';
 });
 
@@ -587,8 +587,8 @@ joinBtn?.addEventListener('click', () => {
     const code = sessionCodeInput?.value?.trim();
     const pass = controllerPassInput?.value?.trim();
     if (!code || !pass) { if (loginFeedback) loginFeedback.innerText = 'Preencha o código e a senha.'; return; }
-    sessionStorage.setItem('proof_session_code', code);
-    sessionStorage.setItem('proof_session_pass', pass);
+    sessionStorage.setItem('quest_session_code', code);
+    sessionStorage.setItem('quest_session_pass', pass);
     socket.emit('joinAdminSession', { sessionCode: code, password: pass, role: 'controller' });
 });
 

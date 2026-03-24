@@ -1,6 +1,6 @@
 const { registerQuestionHandlers } = require('./questions');
 
-// This is a simplified version based on mindpool.js
+// This is a simplified version based on mind.js
 // You should adapt it with the full logic for Rush sessions.
 
 const logger = {

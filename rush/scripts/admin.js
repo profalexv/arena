@@ -273,8 +273,8 @@ createSessionBtn?.addEventListener('click', () => {
         
         if (response.success) {
             questionsToImport = []; // Limpa após o uso
-            sessionStorage.setItem('arena_session_code', response.sessionCode);
-            sessionStorage.setItem('arena_session_pass', controllerPassword);
+            sessionStorage.setItem('rush_session_code', response.sessionCode);
+            sessionStorage.setItem('rush_session_pass', controllerPassword);
 
             // Define a senha correta do presenter para a próxima página
             let presenterPassForStorage = '';
@@ -283,7 +283,7 @@ createSessionBtn?.addEventListener('click', () => {
             } else if (!noPresenterPass) {
                 presenterPassForStorage = presenterPassword;
             }
-            sessionStorage.setItem('arena_presenter_pass', presenterPassForStorage);
+            sessionStorage.setItem('rush_presenter_pass', presenterPassForStorage);
 
             window.location.href = `controller.html?session=${response.sessionCode}`;
         } else {
@@ -311,11 +311,11 @@ joinSessionBtn?.addEventListener('click', () => {
 
     const roleToJoin = role || 'controller';
     // Armazena a senha na chave correta para a role que está entrando
-    sessionStorage.setItem('arena_session_code', sessionCode);
+    sessionStorage.setItem('rush_session_code', sessionCode);
     if (roleToJoin === 'presenter') {
-        sessionStorage.setItem('arena_presenter_pass', password);
+        sessionStorage.setItem('rush_presenter_pass', password);
     } else {
-        sessionStorage.setItem('arena_session_pass', password);
+        sessionStorage.setItem('rush_session_pass', password);
     }
 
     const targetPage = roleToJoin === 'controller' ? 'controller' : roleToJoin;
