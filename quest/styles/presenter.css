@@ -1,0 +1,190 @@
+/* quest/styles/presenter.css — Tela de projeção */
+
+* { box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.presenter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2rem;
+    background-color: var(--container-bg);
+    border-bottom: 1px solid var(--input-border);
+}
+.presenter-header h1 { font-size: 1.3rem; margin: 0; }
+
+.session-code-display {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--primary-color);
+}
+
+/* Layout principal */
+.presenter-body {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+@media (max-width: 800px) {
+    .presenter-body { grid-template-columns: 1fr; }
+}
+
+/* Painel info (QR + código) */
+.info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    text-align: center;
+}
+.qr-container {
+    background-color: var(--container-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    width: 100%;
+}
+.qr-container h3 { margin: 0 0 1rem; font-size: 0.9rem; opacity: 0.7; text-transform: uppercase; }
+#qr-code { display: flex; justify-content: center; }
+.url-display {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    word-break: break-all;
+    margin-top: 0.5rem;
+}
+
+/* Stats resumo */
+.stats-summary {
+    width: 100%;
+    background-color: var(--container-bg);
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+}
+.stats-summary h3 { margin: 0 0 1rem; font-size: 0.9rem; opacity: 0.7; text-transform: uppercase; }
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+.stat-box .stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+.stat-box label { font-size: 0.75rem; opacity: 0.6; text-transform: uppercase; }
+.stat-box.approved-stat .stat-value { color: #28a745; }
+.stat-box.failed-stat .stat-value { color: #dc3545; }
+.stat-box.avg-stat .stat-value { color: var(--primary-color); }
+
+/* Distribuição de notas */
+.grades-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .grades-panel { grid-template-columns: 1fr; }
+}
+
+.grade-group {
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    padding: 1.25rem;
+}
+.grade-group h3 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--input-border);
+}
+.grade-group.approved-group h3 { color: #28a745; }
+.grade-group.failed-group h3 { color: #dc3545; }
+
+.grades-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.grade-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    background-color: var(--background-color);
+    border: 1px solid var(--input-border);
+    font-size: 1.05rem;
+}
+
+.approved-item { border-left: 4px solid #28a745; }
+.failed-item { border-left: 4px solid #dc3545; }
+
+.rank-pos {
+    font-weight: 700;
+    font-size: 0.85rem;
+    opacity: 0.5;
+    margin-right: 0.5rem;
+    min-width: 1.5rem;
+}
+.student-name { flex: 1; font-weight: 600; }
+
+.grade-pill {
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+.grade-pill.passed { background-color: #d4edda; color: #155724; }
+.grade-pill.failed { background-color: #f8d7da; color: #721c24; }
+
+.empty-item {
+    list-style: none;
+    text-align: center;
+    opacity: 0.4;
+    font-style: italic;
+    padding: 1rem;
+}
+
+/* Login overlay */
+#login-section {
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+#login-section button { width: 100%; margin-top: 0.5rem; }
+#login-feedback { margin-top: 1rem; font-size: 0.9rem; color: var(--danger-color); }

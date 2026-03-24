@@ -14,12 +14,14 @@ const server = http.createServer(app);
 // Configuração de CORS dinâmica para Socket.IO
 const getOrigins = () => {
     const origins = [
-        "https://mindpool.axom.app",
-        "http://mindpool.axom.app",
+        "https://rush.axom.app",
+        "http://rush.axom.app",
+        "https://mind.axom.app",
+        "http://mind.axom.app",
+        "https://quest.axom.app",
+        "http://quest.axom.app",
         "https://arena.axom.app",
         "http://arena.axom.app",
-        "https://proof.axom.app",
-        "http://proof.axom.app",
         "https://cronos.axom.app",
         "http://cronos.axom.app",
         "https://panel.zukon.tech",
@@ -42,16 +44,16 @@ const io = new Server(server, { // eslint-disable-line
 ioRef.set(io);
 
 // ── Frontends estáticos — roteamento por hostname ─────────────
-// arena.axom.app   → serve render/arena/
-// mindpool.axom.app → serve render/mindpool/
-// proof.axom.app   → serve render/proof/
-// qualquer outro   → landing page pública em render/public/
+// rush.axom.app   → serve arena/rush/
+// mind.axom.app   → serve arena/mind/
+// quest.axom.app  → serve arena/quest/
+// qualquer outro  → landing page pública em arena/public/
 
 const APP_HOSTS = {
-    'arena.axom.app':    'arena',
-    'mindpool.axom.app': 'mindpool',
-    'proof.axom.app':    'proof',
-    'panel.zukon.tech':  'panel',
+    'rush.axom.app':    'rush',
+    'mind.axom.app':    'mind',
+    'quest.axom.app':   'quest',
+    'panel.zukon.tech': 'panel',
 };
 
 // Middleware de roteamento por hostname (deve vir ANTES das rotas de API)
@@ -85,9 +87,9 @@ app.use(express.json({ limit: '512kb' }));
 // ── Rotas HTTP — Quiz Premium ──────────────────────────────────
 // CRUD de questionários salvos na nuvem (requer auth premium via motor)
 const createQuestionnairesRouter = require('./shared/questionnairesRouter');
-app.use('/arena/questionnaires',    createQuestionnairesRouter('arena'));
-app.use('/mindpool/questionnaires', createQuestionnairesRouter('mindpool'));
-app.use('/proof/questionnaires',    createQuestionnairesRouter('proof'));
+app.use('/rush/questionnaires',  createQuestionnairesRouter('rush'));
+app.use('/mind/questionnaires',  createQuestionnairesRouter('mind'));
+app.use('/quest/questionnaires', createQuestionnairesRouter('quest'));
 
 // Servir arquivos estáticos da pasta 'shared'
 app.use('/shared', express.static(path.join(__dirname, 'shared')));

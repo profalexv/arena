@@ -3,10 +3,10 @@
  * shared/questionnairesRouter.js
  *
  * Fábrica de router Express para CRUD de questionários na nuvem.
- * Usado tanto pelo módulo arena quanto pelo mindpool.
+ * Usado tanto pelo módulo rush quanto pelo mind.
  *
  * Parâmetros:
- *   appType: 'arena' | 'mindpool'
+ *   appType: 'rush' | 'mind'
  *
  * Rotas geradas (prefixo configurado em server.js):
  *   GET    /questionnaires           — lista questionários do usuário

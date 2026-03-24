@@ -6,7 +6,7 @@
  * Os contadores resetam a cada deploy (comportamento esperado — monitor ao vivo).
  *
  * Uso:
- *   sessionStats.hookNamespace(nsp, 'arena');   → chamado em server.js
+ *   sessionStats.hookNamespace(nsp, 'rush');   → chamado em server.js
  *   sessionStats.getAllStats();                  → lido por panel/panel.js
  */
 

@@ -1,15 +1,15 @@
-# Render — Backend Hub (Arena, MindPool, Proof)
+# Arena — Backend Hub (Rush, Mind, Quest, Cronos)
 
 > **URL de produção:** https://profalexv-alexluza.onrender.com  
-> **Repositório:** github.com/profalexv/render  
+> **Repositório:** github.com/profalexv/arena  
 > **Deploy:** push para `main` → auto-deploy no render.com
 
 ---
 
-## O que é o Render?
+## O que é o Arena?
 
 Backend Node.js + Socket.IO centralizado para as ferramentas interativas do ecossistema Axom.  
-Serve exclusivamente: **Arena**, **MindPool** e **Proof** — os quizzes/avaliações em tempo real.  
+Serve exclusivamente: **Rush**, **Mind** e **Quest** — os quizzes/avaliações em tempo real.  
 Também acessa o **Supabase** para persistência de questionários premium.
 
 ---
@@ -17,35 +17,35 @@ Também acessa o **Supabase** para persistência de questionários premium.
 ## Arquitetura
 
 ```
-render/ (render.com → profalexv-alexluza.onrender.com)
+arena/ (render.com → profalexv-alexluza.onrender.com)
   ├── server.js               ← Express + Socket.IO; carrega módulos dinamicamente
-  ├── arena/
-  │   ├── arena.js            ← Socket.IO namespace /arena (Arena)
+  ├── rush/
+  │   ├── rush.js             ← Socket.IO namespace /rush (Quiz competitivo)
   │   └── questions.js        ← Lógica de perguntas compartilhada
-  ├── mindpool/
-  │   ├── mindpool.js         ← Socket.IO namespace /mindpool
+  ├── mind/
+  │   ├── mind.js             ← Socket.IO namespace /mind (Quiz colaborativo)
   │   └── questions.js
-  ├── proof/
-  │   ├── proof.js            ← Socket.IO namespace /proof
+  ├── quest/
+  │   ├── quest.js            ← Socket.IO namespace /quest (Avaliação com notas)
   │   └── questions.js
   └── shared/
       └── questionnairesRouter.js  ← CRUD de questionários (REST + Supabase)
 ```
 
-> ⚠️ O Cronos usa este backend para cloud storage (REST `/cronos/schedules`). O login ainda ocorre pelo motor (Fly.io).
+> ⚠️ O Cronos usa este backend para cloud storage (REST `/cronos/schedules`). O login ainda ocorre pelo login/ (Fly.io).
 
 ---
 
 ## Regras de Arquitetura
 
-1. **Apenas o render acessa o Supabase para os projetos Arena/MindPool/Proof.**  
+1. **Apenas o Arena acessa o Supabase para os projetos Rush/Mind/Quest.**  
    Nenhum frontend toca o banco diretamente.
 
 2. **Os frontends sempre apontam para este backend remoto**, inclusive em testes locais.  
-   Não existe instância local do render — use o serviço no render.com.
+   Não existe instância local do arena — use o serviço no render.com.
 
-3. **Autenticação premium** é validada via JWT emitido pelo motor (Fly.io):  
-   o render chama `MOTOR_URL/api/quiz/auth/verify` para confirmar tokens.
+3. **Autenticação premium** é validada via JWT emitido pelo login/ (Fly.io):  
+   o arena chama `LOGIN_URL/api/quiz/auth/verify` para confirmar tokens.
 
 ---
 
@@ -63,9 +63,9 @@ render/ (render.com → profalexv-alexluza.onrender.com)
 
 | Namespace | Projeto | Armazenamento |
 |---|---|---|
-| `/arena` | Arena | Em memória (sem banco) |
-| `/mindpool` | MindPool | Em memória (sem banco) |
-| `/proof` | Proof | Em memória + notas via motor |
+| `/rush` | Rush | Em memória (sem banco) |
+| `/mind` | Mind | Em memória (sem banco) |
+| `/quest` | Quest | Em memória + notas via login/ |
 
 ---
 
@@ -73,12 +73,12 @@ render/ (render.com → profalexv-alexluza.onrender.com)
 
 | Rota | Descrição |
 |---|---|
-| `GET /arena/questionnaires` | Lista questionários salvos (Arena) |
-| `POST /arena/questionnaires` | Cria questionário (Arena) |
-| `GET /mindpool/questionnaires` | Lista questionários (MindPool) |
-| `POST /mindpool/questionnaires` | Cria questionário (MindPool) |
-| `GET /proof/questionnaires` | Lista questionários (Proof) |
-| `POST /proof/questionnaires` | Cria questionário (Proof) |
+| `GET /rush/questionnaires` | Lista questionários salvos (Rush) |
+| `POST /rush/questionnaires` | Cria questionário (Rush) |
+| `GET /mind/questionnaires` | Lista questionários (Mind) |
+| `POST /mind/questionnaires` | Cria questionário (Mind) |
+| `GET /quest/questionnaires` | Lista questionários (Quest) |
+| `POST /quest/questionnaires` | Cria questionário (Quest) |
 
 ---
 
@@ -88,9 +88,9 @@ render/ (render.com → profalexv-alexluza.onrender.com)
 |---|---|
 | `SUPABASE_URL` | URL do projeto Supabase principal (para cronos_schedules) |
 | `SUPABASE_SERVICE_KEY` | Chave de serviço (service_role) Supabase principal |
-| `SUPABASE_QUIZ_URL` | URL da instância Supabase de questionários (Arena/MindPool/Proof) |
+| `SUPABASE_QUIZ_URL` | URL da instância Supabase de questionários (Rush/Mind/Quest) |
 | `SUPABASE_QUIZ_KEY` | Chave de serviço Supabase questionários |
-| `MOTOR_URL` | URL do backend para verificação de JWT (`https://axom.fly.dev`) |
+| `LOGIN_URL` | URL do backend para verificação de JWT (`https://axom.fly.dev`) |
 | `NODE_ENV` | `production` |
 | `PORT` | Atribuído pelo render.com |
 
@@ -113,7 +113,7 @@ Não há processo de build. O render.com executa `node server.js` diretamente.
 
 | Projeto | Frontend | Namespace / Rota |
 |---|---|---|
-| **Arena** | https://arena.axom.app | Socket `/arena`, REST `/arena/questionnaires` |
-| **MindPool** | https://mindpool.axom.app | Socket `/mindpool`, REST `/mindpool/questionnaires` |
-| **Proof** | https://proof.axom.app | Socket `/proof`, REST `/proof/questionnaires` |
+| **Rush** | https://rush.axom.app | Socket `/rush`, REST `/rush/questionnaires` |
+| **Mind** | https://mind.axom.app | Socket `/mind`, REST `/mind/questionnaires` |
+| **Quest** | https://quest.axom.app | Socket `/quest`, REST `/quest/questionnaires` |
 | **Cronos** | https://cronos.axom.app | REST `/cronos/schedules` (cloud storage) |

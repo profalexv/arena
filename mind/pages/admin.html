@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <title>Acesso Administrativo</title>
+    <link rel="stylesheet" href="../styles/mind.css">
+</head>
+<body class="admin-page centered-layout">
+    <div id="connection-status-banner" class="connection-status-banner">
+        <span class="spinner"></span> <span id="connection-status-text">Conectando ao servidor...</span>
+    </div>
+    <div class="container">
+        <h1>Mind - <span id="page-title"></span></h1>
+        <p id="error-message" style="display: none;"></p>
+
+        <!-- Botões de Ação Principal -->
+        <div id="action-buttons" class="form-section">
+            <button id="create-session-main-btn">
+                ➕ CRIAR SESSÃO
+            </button>
+            <button id="join-session-main-btn">
+                🔗 ENTRAR EM SESSÃO
+            </button>
+            <button id="back-to-index-btn" class="back-button" style="margin-top: 15px;">Voltar para o Início</button>
+        </div>
+
+        <!-- Formulário para Nova Sessão -->
+        <div id="new-session-form" class="form-section">
+            <div class="form-header">
+                <button class="back-to-menu-btn back-button">← Voltar</button>
+            </div>
+            <h2>Criar Nova Sessão</h2>
+            <div style="margin-bottom: 1rem;">
+                <button id="load-session-from-file-btn" class="secondary-button" style="width: 100%;">Carregar de Arquivo (.json)</button>
+                <input type="file" id="load-session-input" accept=".json" style="display: none;">
+            </div>
+            <label for="session-deadline">Horário Final da Sessão (Opcional)</label>
+            <input type="time" id="session-deadline">
+            <input type="password" id="new-controller-pass" placeholder="Crie uma senha para o Controller">
+            <div class="form-group">
+                <input type="password" id="new-presenter-pass" placeholder="Crie uma senha para o Presenter">
+            </div>
+            <div class="form-group-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="repeat-controller-pass" checked> Usar a mesma senha do Controller
+                </label>
+                <!-- A opção "Sem senha para o Apresentador" foi removida para o Mind -->
+            </div>
+            <label for="session-theme" style="margin-top: 10px; display: block;">Tema da Apresentação:</label>
+            <select id="session-theme" name="session-theme">
+                <option value="light" selected>Claro (Light)</option>
+                <option value="dark">Escuro (Dark)</option>
+                <option value="corporate">Azul Corporativo</option>
+                <option value="fun">Divertido (Fun)</option>
+                <option value="sublime">Sublime</option>
+            </select>
+            <button id="create-session-btn">Criar e Entrar</button>
+        </div>
+
+        <!-- Formulário para Entrar em Sessão -->
+        <div id="join-session-form" class="form-section">
+            <div class="form-header">
+                <button class="back-to-menu-btn back-button">← Voltar</button>
+            </div>
+            <h2>Entrar em Sessão</h2>
+            <input type="text" id="join-session-code" placeholder="Código da Sessão">
+            <input type="password" id="join-session-pass" placeholder="Senha">
+            <button id="join-session-btn">Entrar em Sessão</button>
+        </div>
+    </div>
+
+   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+   <script>window.QUIZ_APP_TYPE = 'mind';</script>
+   <script src="../scripts/quiz-cloud.js"></script>
+   <script src="../scripts/quiz-cloud-ui.js"></script>
+   <script src="../scripts/admin.js?v=2"></script>
+</body>
+</html>

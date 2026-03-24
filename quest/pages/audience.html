@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+    <title>Quest — Participante</title>
+    <link rel="stylesheet" href="../styles/quest.css">
+    <link rel="stylesheet" href="../styles/audience.css">
+</head>
+<body class="audience-page centered-layout">
+
+    <!-- Tela de Login -->
+    <div id="login-screen" class="container">
+        <h1>📝 Entrar na Avaliação</h1>
+        <p id="login-feedback"></p>
+        <input type="text" id="audience-name" placeholder="Seu nome">
+        <input type="password" id="audience-password" placeholder="Senha da avaliação">
+        <button id="join-btn">Entrar</button>
+    </div>
+
+    <!-- Tela do Quiz -->
+    <div id="quiz-screen" class="container" style="display: none;">
+        <div id="question-wrapper">
+            <div id="audience-timer"></div>
+            <div id="question-counter" class="question-counter"></div>
+            <h2 id="question-title">Carregando pergunta...</h2>
+            <div id="options-container"></div>
+            <p id="answer-feedback"></p>
+        </div>
+    </div>
+
+    <!-- Tela de Resultado Final -->
+    <div id="game-over-screen" class="container" style="display: none;">
+        <div id="grade-result-card" class="grade-result-card">
+            <h1>📋 Avaliação Concluída</h1>
+            <div class="grade-display">
+                <span id="final-grade-value" class="grade-value">—</span>
+                <span id="final-grade-max" class="grade-max">/10</span>
+            </div>
+            <div id="pass-fail-badge" class="pass-fail-badge"></div>
+            <p id="grade-detail" class="grade-detail"></p>
+        </div>
+        <button id="exit-btn" style="margin-top: 2rem;">Sair</button>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        (function() {
+            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const backendHost = isDevelopment ? 'http://localhost:3000' : '';
+            document.write(`<script src="${backendHost}/shared/scripts/cronometro.js"><\/script>`);
+        })();
+    </script>
+    <script src="../scripts/audience.js"></script>
+</body>
+</html>

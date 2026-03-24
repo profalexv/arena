@@ -2,7 +2,7 @@
 /**
  * shared/supabaseQuiz.js
  *
- * Cliente Supabase para a instância dedicada de questionários (Arena + MindPool).
+ * Cliente Supabase para a instância dedicada de questionários (Rush + Mind).
  * Variáveis de ambiente necessárias no render.com:
  *   SUPABASE_QUIZ_URL      — URL da instância Supabase Quiz
  *   SUPABASE_QUIZ_KEY      — service_role key (acesso total, sem RLS)

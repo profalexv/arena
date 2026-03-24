@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+    <title>Quest — Acesso</title>
+    <link rel="stylesheet" href="../styles/quest.css">
+</head>
+<body class="admin-page centered-layout">
+    <div id="connection-status-banner" class="connection-status-banner">
+        <span class="spinner"></span> <span id="connection-status-text">Conectando ao servidor...</span>
+    </div>
+    <div class="container">
+        <h1>📝 Quest — <span id="page-title"></span></h1>
+        <p id="error-message" style="display: none;"></p>
+
+        <!-- Botões de Ação Principal -->
+        <div id="action-buttons" class="form-section">
+            <button id="create-session-main-btn">➕ CRIAR AVALIAÇÃO</button>
+            <button id="join-session-main-btn">🔗 ENTRAR EM AVALIAÇÃO</button>
+            <button id="back-to-index-btn" class="back-button" style="margin-top: 15px;">Voltar para o Início</button>
+        </div>
+
+        <!-- Formulário para Nova Avaliação -->
+        <div id="new-session-form" class="form-section">
+            <div class="form-header">
+                <button class="back-to-menu-btn back-button">← Voltar</button>
+            </div>
+            <h2>Criar Nova Avaliação</h2>
+            <div style="margin-bottom: 1rem;">
+                <button id="load-session-from-file-btn" class="secondary-button" style="width: 100%;">Carregar Perguntas de Arquivo (.json)</button>
+                <input type="file" id="load-session-input" accept=".json" style="display: none;">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group-half">
+                    <label for="max-grade">Nota Máxima</label>
+                    <input type="number" id="max-grade" value="10" min="1" max="100" step="0.5">
+                </div>
+                <div class="form-group-half">
+                    <label for="passing-grade">Nota de Aprovação</label>
+                    <input type="number" id="passing-grade" value="5" min="0" max="100" step="0.5">
+                </div>
+            </div>
+
+            <label for="session-deadline">Horário Final da Avaliação (Opcional)</label>
+            <input type="time" id="session-deadline">
+
+            <input type="password" id="new-controller-pass" placeholder="Senha para o Painel de Controle">
+            <div class="form-group">
+                <input type="password" id="new-presenter-pass" placeholder="Senha para a Tela de Projeção">
+            </div>
+            <div class="form-group-options">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="repeat-controller-pass" checked> Usar a mesma senha da projeção
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="no-presenter-pass"> Sem senha para a projeção
+                </label>
+            </div>
+            <label for="session-theme" style="margin-top: 10px; display: block;">Tema Visual:</label>
+            <select id="session-theme" name="session-theme">
+                <option value="light" selected>Claro (Light)</option>
+                <option value="dark">Escuro (Dark)</option>
+                <option value="corporate">Azul Corporativo</option>
+                <option value="fun">Divertido (Fun)</option>
+                <option value="sublime">Sublime</option>
+            </select>
+            <button id="create-session-btn">Criar e Entrar</button>
+        </div>
+
+        <!-- Formulário para Entrar em Avaliação -->
+        <div id="join-session-form" class="form-section">
+            <div class="form-header">
+                <button class="back-to-menu-btn back-button">← Voltar</button>
+            </div>
+            <h2>Entrar em Avaliação</h2>
+            <input type="text" id="join-session-code" placeholder="Código da Avaliação">
+            <input type="password" id="join-session-pass" placeholder="Senha">
+            <button id="join-session-btn">Entrar</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>window.QUIZ_APP_TYPE = 'quest';</script>
+    <script src="../scripts/quiz-cloud.js"></script>
+    <script src="../scripts/quiz-cloud-ui.js"></script>
+    <script src="../scripts/admin.js"></script>
+</body>
+</html>

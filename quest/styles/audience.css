@@ -1,0 +1,202 @@
+/* quest/styles/audience.css — Estilos da tela de audiência */
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Tela de login */
+#login-screen {
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+    padding: 2rem;
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    text-align: center;
+}
+#login-screen h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+#login-screen h2 { font-size: 1.1rem; font-weight: 400; margin-bottom: 2rem; opacity: 0.7; }
+#login-screen button { width: 100%; padding: 14px; font-size: 1.1rem; }
+#login-feedback { margin-top: 1rem; font-size: 0.9rem; color: var(--primary-color); min-height: 1.2em; }
+
+/* Tela de quiz */
+#quiz-screen {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.question-counter {
+    display: block;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+#audience-timer {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#question-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+.video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+}
+
+#options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+#options-container button {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1.05rem;
+    text-align: left;
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+#options-container button:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    background-color: color-mix(in srgb, var(--primary-color) 8%, var(--container-bg));
+}
+#options-container button:disabled { opacity: 0.6; }
+#options-container input[type="text"],
+#options-container input[type="number"] {
+    margin-bottom: 0.5rem;
+}
+
+.mcq-option-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 12px 16px;
+    border: 2px solid var(--input-border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.mcq-option-label input[type="checkbox"] { width: auto; margin-bottom: 0; }
+.mcq-option-label:hover { border-color: var(--primary-color); }
+
+#answer-feedback {
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    min-height: 1.4em;
+}
+
+/* Tela de resultado final */
+#game-over-screen {
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.grade-result-card {
+    background-color: var(--container-bg);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    border: 1px solid var(--input-border);
+}
+
+.grade-result-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.grade-display {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.15rem;
+    margin-bottom: 1rem;
+}
+
+.grade-value {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.grade-max {
+    font-size: 2rem;
+    font-weight: 400;
+    opacity: 0.5;
+}
+
+.pass-fail-badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    border-radius: 9999px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.pass-fail-badge.approved {
+    background-color: color-mix(in srgb, var(--success-color) 15%, transparent);
+    color: var(--success-color);
+    border: 2px solid var(--success-color);
+}
+.pass-fail-badge.failed {
+    background-color: color-mix(in srgb, var(--danger-color) 15%, transparent);
+    color: var(--danger-color);
+    border: 2px solid var(--danger-color);
+}
+
+.grade-detail {
+    font-size: 0.95rem;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+}
+
+#exit-btn {
+    background-color: var(--background-color-alt);
+    color: var(--text-color);
+    width: 100%;
+}

@@ -1,5 +1,5 @@
 {
-  "name": "render-backend",
+  "name": "arena-backend",
   "version": "1.0.0",
   "description": "Backend for multiple projects",
   "main": "server.js",

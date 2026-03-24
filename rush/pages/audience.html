@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <title>Rush - Participante</title>
+    <link rel="stylesheet" href="../styles/rush.css">
+    <link rel="stylesheet" href="../styles/audience.css">
+</head>
+<body class="audience-page centered-layout">
+
+    <!-- Tela de Login -->
+    <div id="login-screen" class="container">
+        <h1>Entrar na Sessão</h1>
+        <p id="login-feedback"></p>
+        <input type="text" id="audience-name" placeholder="Seu nome">
+        <input type="password" id="audience-password" placeholder="Senha da sessão">
+        <button id="join-btn">Entrar</button>
+    </div>
+
+    <!-- Tela do Quiz -->
+    <div id="quiz-screen" class="container" style="display: none;">
+        
+        <!-- Wrapper para a pergunta, para poder ocultá-la -->
+        <div id="question-wrapper">
+            <div id="audience-timer"></div>
+            <h2 id="question-title">Carregando pergunta...</h2>
+            <div id="options-container">
+                <!-- Opções de resposta serão inseridas aqui -->
+            </div>
+            <p id="answer-feedback"></p>
+        </div>
+
+        <!-- Container para exibir as visualizações de progresso -->
+        <div id="audience-progress-container" style="display: none;">
+            <!-- Conteúdo gerado por audience.js -->
+        </div>
+
+    </div>
+
+    <!-- Tela de Fim de Jogo -->
+    <div id="game-over-screen" class="container" style="display: none;">
+        <h1>Fim de Jogo!</h1>
+        <p>Obrigado por participar.</p>
+        <h2>Seu Resultado Final</h2>
+        <p>Pontuação: <strong id="final-score">0/0</strong></p>
+        <p>Ranking: <strong id="final-rank">#0 de 0</strong></p>
+        <button id="exit-btn" style="margin-top: 2rem;">Sair</button>
+    </div>
+
+    <!-- Botão flutuante para alternar visualizações -->
+    <div id="view-switcher" style="display: none;">
+        <span id="view-switcher-text"></span>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        // Carrega dinamicamente o script compartilhado do backend
+        (function() {
+            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const backendHost = isDevelopment ? 'http://localhost:3000' : ''; // Em produção, o caminho é relativo à raiz do domínio (via proxy)
+            document.write(`<script src="${backendHost}/shared/scripts/cronometro.js"><\/script>`);
+        })();
+    </script>
+    <script src="../scripts/audience.js"></script>
+</body>
+</html>
