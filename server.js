@@ -90,6 +90,15 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Health check para o Painel Isolado consultar Status e Sessões
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        uptime: process.uptime(),
+        sessions: sessionStats.getAllStats()
+    });
+});
+
 // Servir landing page pública
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
