@@ -1,8 +1,6 @@
 // --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO ---
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
 // Conecta diretamente ao backend, usando o namespace '/rush'
-const socketUrl = isDevelopment ? 'http://localhost:3000/rush' : 'https://profalexv-alexluza.onrender.com/rush';
+const socketUrl = 'https://profalexv-alexluza.onrender.com/rush';
 const socket = io(socketUrl, {
     transports: ['websocket', 'polling'],
     withCredentials: true,

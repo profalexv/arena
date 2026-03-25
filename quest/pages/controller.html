@@ -199,14 +199,13 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
         (function() {
-            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const backendHost = isDevelopment ? 'http://localhost:3000' : '';
+            const backendHost = '';
             document.write(`<script src="${backendHost}/shared/scripts/cronometro.js"><\/script>`);
         })();
     </script>
     <script>window.QUIZ_APP_TYPE = 'quest';</script>
-    <script src="../scripts/quiz-cloud.js"></script>
-    <script src="../scripts/quiz-cloud-ui.js"></script>
+    <script src="/shared/quiz-cloud.js"></script>
+    <script src="/shared/quiz-cloud-ui.js"></script>
     <script src="../scripts/controller.js"></script>
 </body>
 </html>

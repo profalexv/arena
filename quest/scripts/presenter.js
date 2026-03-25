@@ -1,6 +1,5 @@
 // ===== PRESENTER DO QUEST =====
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const socketUrl = isDevelopment ? 'http://localhost:3000/quest' : 'https://profalexv-alexluza.onrender.com/quest';
+const socketUrl = 'https://profalexv-alexluza.onrender.com/quest';
 const socket = io(socketUrl, {
     transports: ['websocket', 'polling'],
     withCredentials: true,

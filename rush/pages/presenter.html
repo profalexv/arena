@@ -36,8 +36,7 @@
     <script>
         // Carrega dinamicamente o script compartilhado do backend
         (function() {
-            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const backendHost = isDevelopment ? 'http://localhost:3000' : ''; // Em produção, o caminho é relativo à raiz do domínio (via proxy)
+            const backendHost = '';
             document.write(`<script src="${backendHost}/shared/scripts/cronometro.js"><\/script>`);
         })();
     </script>

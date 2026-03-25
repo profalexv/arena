@@ -1,8 +1,6 @@
 // --- 1. CONFIGURAÇÃO E INICIALIZAÇÃO ---
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
 // Conecta diretamente ao backend, usando o namespace '/mind'
-const socketUrl = isDevelopment ? 'http://localhost:3000/mind' : 'https://profalexv-alexluza.onrender.com/mind';
+const socketUrl = 'https://profalexv-alexluza.onrender.com/mind';
 const socketOptions = {
     transports: ['websocket', 'polling'],
     withCredentials: true,

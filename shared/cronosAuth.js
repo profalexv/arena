@@ -9,10 +9,10 @@
  * Em caso de sucesso, adiciona req.cronosUser = { userId, schoolId, role }.
  *
  * Variável de ambiente necessária:
- *   MOTOR_URL — ex: https://aula-motor.fly.dev
+ *   MOTOR_URL — ex: https://axom.fly.dev
  */
 
-const MOTOR_URL = process.env.MOTOR_URL || 'https://aula-motor.fly.dev';
+const MOTOR_URL = process.env.MOTOR_URL || 'https://axom.fly.dev';
 
 async function cronosAuthMiddleware(req, res, next) {
     const header = req.headers['authorization'] || '';

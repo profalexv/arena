@@ -8,11 +8,11 @@
  * Em caso de sucesso, adiciona req.quizUser = { userId, email, role, hasAccess }.
  * Em caso de falha, responde 401 ou 403.
  *
- * Variável de ambiente necessária:
- *   MOTOR_URL — ex: https://aula-motor.fly.dev
+ * Variável de ambiente (obrigatória em produção — ver server.js):
+ *   MOTOR_URL — ex: https://axom.fly.dev
  */
 
-const MOTOR_URL = process.env.MOTOR_URL || 'https://aula-motor.fly.dev';
+const MOTOR_URL = (process.env.MOTOR_URL || '').trim() || 'https://axom.fly.dev';
 
 async function quizAuthMiddleware(req, res, next) {
   const header = req.headers['authorization'] || '';

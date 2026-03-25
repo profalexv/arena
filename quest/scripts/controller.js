@@ -1,6 +1,6 @@
 // ===== CONTROLLER DO QUEST =====
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const socketUrl = isDevelopment ? 'http://localhost:3000/quest' : 'https://profalexv-alexluza.onrender.com/quest';
+const socketUrl = 'https://profalexv-alexluza.onrender.com/quest';
+const MOTOR_PUBLIC_URL = 'https://axom.fly.dev';
 const socket = io(socketUrl, {
     transports: ['websocket', 'polling'],
     withCredentials: true,
@@ -451,7 +451,7 @@ scholarBtn?.addEventListener('click', async () => {
     const token = QuizCloud.getToken();
     if (!token) { alert('Faça login com sua conta escolar para enviar ao Scholar.'); return; }
 
-    const motorUrl = isDevelopment ? 'http://localhost:3001' : 'https://aula-motor.fly.dev';
+    const motorUrl = MOTOR_PUBLIC_URL;
     socket.emit('requestGrades', { sessionCode: sessionState.sessionCode }, async (response) => {
         if (!response?.grades) { alert('Nenhuma nota para enviar.'); return; }
         try {

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
@@ -7,34 +9,41 @@ const { Server } = require("socket.io");
 const sessionStats = require('./shared/sessionStats');
 const ioRef        = require('./shared/ioRef');
 
+const isProduction = process.env.NODE_ENV === 'production' || Boolean(process.env.RENDER);
+if (isProduction && !(process.env.MOTOR_URL || '').trim()) {
+    console.error('FATAL: MOTOR_URL must be set in production (quiz auth verification).');
+    process.exit(1);
+}
+
 const app = express();
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
-// Configuração de CORS dinâmica para Socket.IO
-const getOrigins = () => {
-    const origins = [
-        "https://rush.axom.app",
-        "http://rush.axom.app",
-        "https://mind.axom.app",
-        "http://mind.axom.app",
-        "https://quest.axom.app",
-        "http://quest.axom.app",
-        "https://arena.axom.app",
-        "http://arena.axom.app",
-        "https://cronos.axom.app",
-        "http://cronos.axom.app",
-        "https://panel.zukon.tech",
-        "https://profalexv-alexluza.onrender.com",
-        "http://localhost:3000",
-        "http://localhost:*"
-    ];
-    return origins;
-};
+// Origens públicas (fluxo de trabalho: deploy e teste em produção, sem hub local)
+const SOCKET_CORS_ORIGINS = new Set([
+    'https://rush.axom.app',
+    'http://rush.axom.app',
+    'https://mind.axom.app',
+    'http://mind.axom.app',
+    'https://quest.axom.app',
+    'http://quest.axom.app',
+    'https://arena.axom.app',
+    'http://arena.axom.app',
+    'https://cronos.axom.app',
+    'http://cronos.axom.app',
+    'https://panel.zukon.tech',
+    'https://profalexv-alexluza.onrender.com',
+]);
+
+function socketCorsOriginMatcher(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (SOCKET_CORS_ORIGINS.has(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+}
 
 const io = new Server(server, { // eslint-disable-line
     cors: {
-        origin: getOrigins(),
+        origin: socketCorsOriginMatcher,
         methods: ["GET", "POST"],
         credentials: true
     },
@@ -42,6 +51,9 @@ const io = new Server(server, { // eslint-disable-line
 });
 
 ioRef.set(io);
+
+// Scripts partilhados (quiz-cloud) — antes do roteamento por hostname
+app.use('/shared', express.static(path.join(__dirname, 'shared')));
 
 // ── Frontends estáticos — roteamento por hostname ─────────────
 // rush.axom.app   → serve arena/rush/
@@ -90,9 +102,6 @@ const createQuestionnairesRouter = require('./shared/questionnairesRouter');
 app.use('/rush/questionnaires',  createQuestionnairesRouter('rush'));
 app.use('/mind/questionnaires',  createQuestionnairesRouter('mind'));
 app.use('/quest/questionnaires', createQuestionnairesRouter('quest'));
-
-// Servir arquivos estáticos da pasta 'shared'
-app.use('/shared', express.static(path.join(__dirname, 'shared')));
 
 // Dynamically load routes and socket handlers from project folders
 const projectsDir = __dirname;

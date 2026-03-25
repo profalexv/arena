@@ -11,7 +11,7 @@
  *   PANEL_SECRET      — segredo para autenticar o painel
  *   SUPABASE_URL      — já usada por outros módulos
  *   SUPABASE_SERVICE_KEY — já usada por outros módulos
- *   MOTOR_URL         — URL base do motor (default: https://aula-motor.fly.dev)
+ *   MOTOR_URL         — URL base do motor (default: https://axom.fly.dev)
  */
 const express      = require('express');
 const path         = require('path');
@@ -22,7 +22,7 @@ const supabase     = require('../shared/supabaseMain');
 const router = express.Router();
 
 const PANEL_CORS = cors({
-    origin: ['https://panel.zukon.tech', 'http://localhost:3000'],
+    origin: ['https://panel.zukon.tech'],
     methods: ['GET', 'OPTIONS'],
     allowedHeaders: ['x-panel-secret', 'content-type'],
     credentials: false,
@@ -33,7 +33,7 @@ router.options('*', PANEL_CORS);
 // Aplica CORS em todas as respostas
 router.use(PANEL_CORS);
 
-const MOTOR_URL    = process.env.MOTOR_URL    || 'https://aula-motor.fly.dev';
+const MOTOR_URL    = process.env.MOTOR_URL    || 'https://axom.fly.dev';
 const PANEL_SECRET = process.env.PANEL_SECRET || '';
 
 // ── Auth ──────────────────────────────────────────────────────

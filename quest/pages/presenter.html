@@ -32,8 +32,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         (function() {
-            const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            const backendHost = isDevelopment ? 'http://localhost:3000' : '';
+            const backendHost = '';
             document.write(`<script src="${backendHost}/shared/scripts/cronometro.js"><\/script>`);
         })();
     </script>
