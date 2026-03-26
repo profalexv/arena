@@ -16,6 +16,11 @@ if (isProduction && !(process.env.MOTOR_URL || '').trim()) {
 }
 
 const app = express();
+const { initSentry, setupSentryErrorHandler } = require('./sentry');
+
+// Sentry must be first
+initSentry(app);
+
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
@@ -142,6 +147,9 @@ fs.readdirSync(projectsDir).forEach(project => {
     }
   }
 });
+
+// Sentry error handler must be before any other error middleware and after all controllers
+setupSentryErrorHandler(app);
 
 server.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
